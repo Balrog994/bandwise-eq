@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tab EQ</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img src="icons/icon-32.png" width="20" height="20" alt="">
+      <h1 data-i18n="appName">Bandwise EQ</h1>
+    </div>
+    <div class="preset-box">
+      <div class="select light"><select id="preset" aria-label="Preset"></select></div>
+      <button id="savePresetBtn" class="icon-btn" data-i18n-title="savePreset">
+        <svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM7 3v5h8V3M7 21v-7h10v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </button>
+      <button id="sitePin" class="icon-btn pin" aria-pressed="false">
+        <svg viewBox="0 0 24 24"><path d="M9 4h6l-1 6 3 3v2h-4v5l-1 1-1-1v-5H7v-2l3-3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </button>
+      <div id="presetPop" class="pop" hidden>
+        <div class="pop-row">
+          <input id="presetName" type="text" data-i18n-placeholder="presetNamePh" maxlength="40" spellcheck="false">
+          <button id="presetPopOk" class="btn primary" data-i18n="save"></button>
+        </div>
+        <div id="presetManage" class="pop-row manage">
+          <button id="renamePreset" class="btn" data-i18n="rename"></button>
+          <button id="deletePreset" class="btn danger" data-i18n="delete"></button>
+        </div>
+        <div class="pop-row apo">
+          <button id="importApo" class="btn link" data-i18n="importApo"></button>
+          <button id="exportApo" class="btn link" data-i18n="exportApo"></button>
+        </div>
+      </div>
+    </div>
+    <label class="switch" data-i18n-title="powerTitle">
+      <input id="power" type="checkbox" disabled>
+      <span class="track"><span class="thumb"></span></span>
+      <span id="powerLabel" class="switch-label">OFF</span>
+    </label>
+  </header>
+  <div id="status" class="status" hidden></div>
+
+  <section class="display">
+    <div class="legend">
+      <button id="viewPre" class="chip" aria-pressed="true"><span class="sw pre"></span>Pre</button>
+      <button id="viewPost" class="chip" aria-pressed="true"><span class="sw post"></span>Post</button>
+      <button id="viewPeak" class="chip" aria-pressed="false"><span class="sw peak"></span><span data-i18n="legendPeaks"></span></button>
+      <button id="resetPeak" class="icon-btn small" data-i18n-title="resetPeaks" hidden>
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.73 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" fill="currentColor"/></svg>
+      </button>
+      <span class="spacer"></span>
+      <button id="pause" class="icon-btn small" data-i18n-title="pause" aria-pressed="false">
+        <svg viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
+      </button>
+      <div class="help">
+        <button class="icon-btn small" tabindex="-1" data-i18n-aria="help">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1.1" fill="currentColor"/></svg>
+        </button>
+        <div class="help-pop">
+          <div data-i18n-html="help1"></div>
+          <div data-i18n-html="help2"></div>
+          <div data-i18n-html="help3"></div>
+          <div data-i18n-html="help4"></div>
+          <div data-i18n-html="help5"></div>
+          <div data-i18n-html="help6"></div>
+        </div>
+      </div>
+      <button id="gear" class="icon-btn small" data-i18n-title="settings" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.47.47 0 0 0-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.74 8.87a.47.47 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.48.48 0 0 0-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z" fill="currentColor"/></svg>
+      </button>
+    </div>
+
+    <div class="main">
+      <canvas id="graph"></canvas>
+      <div class="strip">
+        <div class="strip-label">PREAMP</div>
+        <div class="fader-row">
+          <div id="fader"></div>
+          <div class="meter-box">
+            <div id="clip" class="clip" data-i18n-title="clipTitle"></div>
+            <canvas id="meter"></canvas>
+            <div class="meter-lr"><span>L</span><span>R</span></div>
+          </div>
+        </div>
+        <div id="preampField" class="strip-field"></div>
+        <button id="ab" class="ab">
+          <span class="a">A</span><span class="slash">/</span><span class="b">B</span>
+          <svg class="lock" viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="anPanel" class="an-panel" hidden>
+      <div class="an-title" data-i18n="settings"></div>
+      <div class="an-sec" data-i18n="secListening"></div>
+      <label class="mini-switch" data-i18n-title="matchABTitle">
+        <input id="matchAB" type="checkbox"><span class="track"><span class="thumb"></span></span> <span data-i18n="matchAB"></span>
+      </label>
+      <div class="an-sec" data-i18n="secAnalyzer"></div>
+      <div class="an-grid">
+        <label>FFT <div class="select"><select id="anFft"></select></div></label>
+        <label><span data-i18n="anScale"></span>
+          <div class="select"><select id="anScale"><option value="log" data-i18n="scaleLog"></option><option value="linear" data-i18n="scaleLin"></option></select></div></label>
+        <label><span data-i18n="anDbRange"></span>
+          <div class="select"><select id="anDbRange"><option value="60">60 dB</option><option value="90">90 dB</option><option value="120">120 dB</option></select></div></label>
+        <label><span data-i18n="anGainRange"></span>
+          <div class="select"><select id="anGainRange"><option value="10">±10 dB</option><option value="20">±20 dB</option><option value="40">±40 dB</option></select></div></label>
+        <label>Smoothing <div id="anSmoothing"></div></label>
+        <button id="anDefaults" class="btn dark" data-i18n="anDefaults"></button>
+      </div>
+      <div id="anInfo" class="an-info"></div>
+    </div>
+
+    <div class="bandbar">
+      <div class="bandbar-top">
+        <div class="seg" role="group">
+          <button id="modeGraphic" class="seg-btn" data-i18n-title="modeGraphicTitle" data-i18n-aria="modeGraphic"><svg viewBox="0 0 24 24"><path d="M6 4v16M12 4v16M18 4v16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45"/><rect x="4" y="12" width="4" height="3" rx="1" fill="currentColor"/><rect x="10" y="7" width="4" height="3" rx="1" fill="currentColor"/><rect x="16" y="14" width="4" height="3" rx="1" fill="currentColor"/></svg><span data-i18n="modeGraphic"></span></button>
+          <button id="modeParam" class="seg-btn" data-i18n-title="modeParametricTitle" data-i18n-aria="modeParametric"><svg viewBox="0 0 24 24"><path d="M3 16c4 0 4-9 7-9s3 9 6 9 3-4 5-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="7" r="2.2" fill="currentColor"/></svg><span data-i18n="modeParametric"></span></button>
+        </div>
+        <div id="chips" class="chips simple-only param-only"></div>
+        <!-- in vista avanzata i bollini lasciano il posto ai comandi della lista -->
+        <button id="addBand" class="btn dark adv-only" data-i18n="addBand"></button>
+        <button id="resetAll" class="btn dark adv-only" data-i18n="resetGains"></button>
+        <span class="spacer"></span>
+        <button id="resetGraphic" class="btn dark graphic-only" data-i18n="resetSliders"></button>
+        <label class="mini-switch adv-only" data-i18n-title="limiterTitle">
+          <input id="limiter" type="checkbox"><span class="track"><span class="thumb"></span></span> <span data-i18n="limiter"></span>
+        </label>
+        <button id="modeBtn" class="mode-btn param-only" aria-expanded="false" data-i18n-title="allBands" data-i18n-aria="allBands">
+          <svg class="list" viewBox="0 0 24 24"><path d="M9.5 6h11M9.5 12h11M9.5 18h11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="4.5" cy="6" r="2.6" fill="#ff9f43"/><circle cx="4.5" cy="12" r="2.6" fill="#ff5fa2"/><circle cx="4.5" cy="18" r="2.6" fill="#3ddc84"/></svg>
+          <svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div id="bandEdit" class="band-row editor param-only"></div>
+      <div id="gbank" class="gbank graphic-only"></div>
+    </div>
+
+    <div id="advanced" class="advanced" hidden>
+      <div id="bandList" class="band-list"></div>
+    </div>
+  </section>
+
+  <div id="importDlg" class="dialog" hidden>
+    <div class="dialog-box">
+      <div class="dialog-title" data-i18n="importTitle"></div>
+      <p class="dialog-hint" data-i18n="importHint"></p>
+      <textarea id="importText" spellcheck="false" placeholder="Preamp: -6.2 dB&#10;Filter 1: ON LSC Fc 105 Hz Gain 5.5 dB Q 0.70&#10;Filter 2: ON PK Fc 210 Hz Gain -2.9 dB Q 0.53&#10;…"></textarea>
+      <div class="dialog-actions">
+        <button id="importFileBtn" class="btn" data-i18n="openFile"></button>
+        <input id="importFile" type="file" accept=".txt,text/plain" hidden>
+        <span class="spacer"></span>
+        <button id="importCancel" class="btn" data-i18n="cancel"></button>
+        <button id="importOk" class="btn primary" data-i18n="import"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="eq-common.js"></script>
+  <script src="i18n.js"></script>
+  <script src="ui-controls.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

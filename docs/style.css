@@ -1,0 +1,74 @@
+:root {
+  --bg: #0f1218; --panel: #161b24; --line: #262c37; --fg: #e8eaed; --muted: #a3abb7;
+  --accent: #7cc4ff; --accent2: #b388ff;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0; color: var(--fg); font: 17px/1.6 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  background:
+    radial-gradient(900px 500px at 80% 0%, rgba(26, 115, 232, .22), transparent 70%),
+    radial-gradient(700px 500px at 0% 30%, rgba(139, 92, 246, .14), transparent 70%),
+    var(--bg);
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+header.nav { display: flex; align-items: center; gap: 12px; padding: 20px 0; }
+header.nav img { width: 32px; height: 32px; }
+header.nav .name { font-weight: 700; font-size: 18px; }
+header.nav nav { margin-left: auto; display: flex; gap: 20px; font-size: 15px; }
+header.nav nav a { color: var(--muted); }
+header.nav nav a:hover { color: var(--fg); text-decoration: none; }
+
+.hero { padding: 48px 0 32px; text-align: center; }
+.hero img.logo { width: 88px; height: 88px; }
+.hero h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.1; margin: 18px 0 14px; letter-spacing: -.5px; }
+.hero p { font-size: 20px; color: var(--muted); max-width: 680px; margin: 0 auto 28px; }
+.cta { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.btn {
+  display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 600; font-size: 16px;
+  border: 1px solid var(--line); color: var(--fg); background: rgba(255, 255, 255, .04);
+}
+.btn.primary { background: #1a73e8; border-color: #1a73e8; color: #fff; }
+.btn:hover { text-decoration: none; filter: brightness(1.1); }
+.btn.disabled { opacity: .6; pointer-events: none; }
+.tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+.tags span { font-size: 14px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--line); color: var(--muted); }
+
+.shot { margin: 40px auto 8px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0, 0, 0, .5); }
+.shot img { display: block; width: 100%; height: auto; }
+.hero-shot { max-width: 600px; background: #202124; }
+
+section { padding: 40px 0; }
+section h2 { font-size: 30px; margin: 0 0 22px; letter-spacing: -.3px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+.card h3 { margin: 0 0 8px; font-size: 19px; }
+.card p { margin: 0; color: var(--muted); font-size: 16px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.gallery img { width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
+ol.steps { padding-left: 22px; color: var(--muted); }
+ol.steps li { margin: 6px 0; }
+ol.steps b { color: var(--fg); }
+
+/* informativa */
+.doc { max-width: 760px; margin: 0 auto; padding: 20px 24px 60px; }
+.doc h1 { font-size: 36px; margin: 20px 0 4px; }
+.doc .date { color: var(--muted); margin-bottom: 30px; }
+.doc h2 { font-size: 22px; margin: 32px 0 10px; }
+.doc p, .doc li { color: #c9d0da; }
+.doc table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 15px; }
+.doc th, .doc td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.doc th { color: var(--muted); font-weight: 600; }
+.doc code { background: rgba(255, 255, 255, .07); padding: 1px 6px; border-radius: 5px; font-size: 14px; }
+.doc hr { border: 0; border-top: 1px solid var(--line); margin: 50px 0; }
+
+footer { border-top: 1px solid var(--line); padding: 26px 0 40px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; gap: 18px; flex-wrap: wrap; }
+footer .grow { flex: 1; }
+
+@media (max-width: 600px) {
+  header.nav nav { gap: 14px; font-size: 14px; }
+  .hero { padding-top: 24px; }
+}

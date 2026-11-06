@@ -1,0 +1,338 @@
+{
+  "appName": {
+    "message": "Bandwise EQ"
+  },
+  "appDesc": {
+    "message": "Graphic & parametric EQ for tab audio: spectrum analyzer, level-matched A/B, AutoEQ import. Private, no network access."
+  },
+  "savePreset": {
+    "message": "Save as preset"
+  },
+  "presetNamePh": {
+    "message": "Preset name"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "rename": {
+    "message": "Rename"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "powerTitle": {
+    "message": "Turn the equalizer on for this tab"
+  },
+  "legendPeaks": {
+    "message": "Peaks"
+  },
+  "resetPeaks": {
+    "message": "Reset peaks"
+  },
+  "pause": {
+    "message": "Freeze spectrum"
+  },
+  "help": {
+    "message": "Help"
+  },
+  "help1": {
+    "message": "<b>Drag</b> a point: frequency and gain"
+  },
+  "help2": {
+    "message": "<b>Scroll</b> over a point: width (Q)"
+  },
+  "help3": {
+    "message": "<b>Knobs</b>: drag vertically or scroll; click the value to type it (e.g. «2.5k»)"
+  },
+  "help4": {
+    "message": "<b>Shift</b>: fine adjustment, everywhere"
+  },
+  "help5": {
+    "message": "<b>Double-click</b>: point, knob or fader back to default"
+  },
+  "help6": {
+    "message": "<b>A/B</b>: hold to listen without EQ, <b>Shift+click</b> to lock it"
+  },
+  "anScale": {
+    "message": "Frequency scale"
+  },
+  "scaleLog": {
+    "message": "Logarithmic"
+  },
+  "scaleLin": {
+    "message": "Linear"
+  },
+  "anDbRange": {
+    "message": "Spectrum range"
+  },
+  "anGainRange": {
+    "message": "Filter gain range"
+  },
+  "anSmoothingTitle": {
+    "message": "0 = no averaging; higher values = steadier but slower spectrum"
+  },
+  "anDefaults": {
+    "message": "Defaults"
+  },
+  "fftBins": {
+    "message": "$1 bins"
+  },
+  "anInfo": {
+    "message": "$1 Hz · $2 Hz/bin · window $3 ms"
+  },
+  "clipTitle": {
+    "message": "Clip: the signal reached 0 dBFS. Click to reset"
+  },
+  "abHoldTitle": {
+    "message": "Hold to listen without EQ · Shift+click to lock the bypass"
+  },
+  "abLockedTitle": {
+    "message": "Bypass locked: click to turn the EQ back on"
+  },
+  "allBands": {
+    "message": "All bands"
+  },
+  "addBand": {
+    "message": "+ Band"
+  },
+  "addBandTitle": {
+    "message": "Add a band"
+  },
+  "resetGains": {
+    "message": "Reset gains"
+  },
+  "limiter": {
+    "message": "Limiter"
+  },
+  "limiterTitle": {
+    "message": "Output limiter: prevents distortion when you boost a lot"
+  },
+  "custom": {
+    "message": "Custom"
+  },
+  "myPresets": {
+    "message": "My presets"
+  },
+  "preset_flat": {
+    "message": "Flat"
+  },
+  "preset_bass": {
+    "message": "Bass boost"
+  },
+  "preset_voice": {
+    "message": "Voice / dialogue"
+  },
+  "preset_treble": {
+    "message": "Treble boost"
+  },
+  "preset_loudness": {
+    "message": "Loudness"
+  },
+  "presetSaved": {
+    "message": "Preset \"$1\" saved."
+  },
+  "presetRenamed": {
+    "message": "Preset renamed to \"$1\"."
+  },
+  "presetDeleted": {
+    "message": "Preset \"$1\" deleted."
+  },
+  "otherTabs": {
+    "message": "EQ active on $1 other tab(s)"
+  },
+  "errBusy": {
+    "message": "This tab is already being captured by another extension (maybe another equalizer)."
+  },
+  "errNoCapture": {
+    "message": "This page can't be captured."
+  },
+  "errInvoke": {
+    "message": "Reopen the popup from the tab you want to equalize and try again."
+  },
+  "errUnknown": {
+    "message": "Unknown error."
+  },
+  "type_peaking": {
+    "message": "Bell"
+  },
+  "type_lowshelf": {
+    "message": "Low shelf"
+  },
+  "type_highshelf": {
+    "message": "High shelf"
+  },
+  "type_lowpass": {
+    "message": "Low-pass"
+  },
+  "type_highpass": {
+    "message": "High-pass"
+  },
+  "type_notch": {
+    "message": "Notch"
+  },
+  "type_bandpass": {
+    "message": "Band-pass"
+  },
+  "filterType": {
+    "message": "Filter type"
+  },
+  "typeHint_peaking": {
+    "message": "boosts or cuts a range around the frequency"
+  },
+  "typeHint_lowshelf": {
+    "message": "boosts or cuts everything below the frequency"
+  },
+  "typeHint_highshelf": {
+    "message": "boosts or cuts everything above the frequency"
+  },
+  "typeHint_lowpass": {
+    "message": "removes everything above the frequency"
+  },
+  "typeHint_highpass": {
+    "message": "removes everything below the frequency (e.g. rumble)"
+  },
+  "typeHint_notch": {
+    "message": "removes a narrow band (e.g. a hum or a whistle)"
+  },
+  "typeHint_bandpass": {
+    "message": "lets through only a band around the frequency"
+  },
+  "frequency": {
+    "message": "Frequency"
+  },
+  "gain": {
+    "message": "Gain"
+  },
+  "qTitle": {
+    "message": "Q: bandwidth (higher = narrower)"
+  },
+  "bandOff": {
+    "message": "Turn the band off"
+  },
+  "bandOn": {
+    "message": "Turn the band on"
+  },
+  "removeBand": {
+    "message": "Remove the band"
+  },
+  "bandChip": {
+    "message": "Band $1: $2 $3 Hz"
+  },
+  "bandChipOff": {
+    "message": "Band $1: $2 $3 Hz (off)"
+  },
+  "noSpectrum": {
+    "message": "Turn the EQ on to see this tab's spectrum"
+  },
+  "bypassTag": {
+    "message": "BYPASS"
+  },
+  "abTag": {
+    "message": "B · EQ OFF"
+  },
+  "xhPeak": {
+    "message": "peak"
+  },
+  "preamp": {
+    "message": "Preamp"
+  },
+  "modeGraphic": {
+    "message": "Graphic"
+  },
+  "modeParametric": {
+    "message": "Parametric"
+  },
+  "modeGraphicTitle": {
+    "message": "10 classic sliders: quick and easy"
+  },
+  "modeParametricTitle": {
+    "message": "Free bands with frequency, gain and Q: for precise corrections. It's the same EQ: your curve carries over"
+  },
+  "approxWarn": {
+    "message": "10 sliders can only approximate this curve (up to $1 dB off). Switch back without moving them to get your original bands."
+  },
+  "resetSliders": {
+    "message": "Reset"
+  },
+  "presetsGraphic": {
+    "message": "Graphic presets"
+  },
+  "presetsParametric": {
+    "message": "Parametric presets"
+  },
+  "preset_rock": {
+    "message": "Rock"
+  },
+  "preset_pop": {
+    "message": "Pop"
+  },
+  "siteRemember": {
+    "message": "Remember these settings for $1"
+  },
+  "siteRemembered": {
+    "message": "Settings remembered for $1 · click to forget"
+  },
+  "siteNA": {
+    "message": "Site memory is not available on this page"
+  },
+  "siteOn": {
+    "message": "$1 will use these settings"
+  },
+  "siteOff": {
+    "message": "$1 forgotten"
+  },
+  "importApo": {
+    "message": "Import AutoEQ / Equalizer APO…"
+  },
+  "exportApo": {
+    "message": "Copy as Equalizer APO"
+  },
+  "importTitle": {
+    "message": "Import a parametric EQ"
+  },
+  "importHint": {
+    "message": "Paste the contents of a ParametricEQ.txt file (AutoEQ, Equalizer APO) or open the file."
+  },
+  "openFile": {
+    "message": "Open file…"
+  },
+  "import": {
+    "message": "Import"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "importDone": {
+    "message": "Imported $1 filters. Save them as a preset to keep them."
+  },
+  "importPartial": {
+    "message": "Imported $1 of $2 filters (max 10, unknown types skipped)."
+  },
+  "importNone": {
+    "message": "No valid filters found."
+  },
+  "exportDone": {
+    "message": "Copied to the clipboard."
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "secListening": {
+    "message": "Listening"
+  },
+  "secAnalyzer": {
+    "message": "Analyzer"
+  },
+  "matchAB": {
+    "message": "Level-matched A/B"
+  },
+  "matchABTitle": {
+    "message": "When you listen to B, its volume is matched to the EQ so you compare the sound, not the loudness"
+  },
+  "abTagMatched": {
+    "message": "B · EQ OFF · $1 dB"
+  },
+  "bypassTagMatched": {
+    "message": "BYPASS · $1 dB"
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "appName": {
+    "message": "Bandwise EQ"
+  },
+  "appDesc": {
+    "message": "EQ grafico e parametrico per l'audio delle schede: analizzatore, A/B a volume pareggiato, import AutoEQ. Nessun accesso alla rete."
+  },
+  "savePreset": {
+    "message": "Salva come preset"
+  },
+  "presetNamePh": {
+    "message": "Nome preset"
+  },
+  "save": {
+    "message": "Salva"
+  },
+  "rename": {
+    "message": "Rinomina"
+  },
+  "delete": {
+    "message": "Elimina"
+  },
+  "powerTitle": {
+    "message": "Attiva l'equalizzatore su questa scheda"
+  },
+  "legendPeaks": {
+    "message": "Picchi"
+  },
+  "resetPeaks": {
+    "message": "Azzera i picchi"
+  },
+  "pause": {
+    "message": "Congela lo spettro"
+  },
+  "help": {
+    "message": "Aiuto"
+  },
+  "help1": {
+    "message": "<b>Trascina</b> un punto: frequenza e guadagno"
+  },
+  "help2": {
+    "message": "<b>Rotella</b> su un punto: larghezza (Q)"
+  },
+  "help3": {
+    "message": "<b>Manopole</b>: trascina in verticale o usa la rotella; clic sul valore per scriverlo (anche «2.5k»)"
+  },
+  "help4": {
+    "message": "<b>Shift</b>: regolazione fine, ovunque"
+  },
+  "help5": {
+    "message": "<b>Doppio clic</b>: punto, manopola o fader tornano al valore di default"
+  },
+  "help6": {
+    "message": "<b>A/B</b>: tieni premuto per ascoltare senza EQ, <b>Shift+clic</b> per bloccarlo"
+  },
+  "anScale": {
+    "message": "Scala frequenze"
+  },
+  "scaleLog": {
+    "message": "Logaritmica"
+  },
+  "scaleLin": {
+    "message": "Lineare"
+  },
+  "anDbRange": {
+    "message": "Range spettro"
+  },
+  "anGainRange": {
+    "message": "Range guadagno filtri"
+  },
+  "anSmoothingTitle": {
+    "message": "0 = nessuna media; valori alti = spettro più stabile ma più lento"
+  },
+  "anDefaults": {
+    "message": "Predefiniti"
+  },
+  "fftBins": {
+    "message": "$1 bin"
+  },
+  "anInfo": {
+    "message": "$1 Hz · $2 Hz/bin · finestra $3 ms"
+  },
+  "clipTitle": {
+    "message": "Clip: il segnale ha raggiunto 0 dBFS. Clic per azzerare"
+  },
+  "abHoldTitle": {
+    "message": "Tieni premuto per ascoltare senza EQ · Shift+clic per bloccare il bypass"
+  },
+  "abLockedTitle": {
+    "message": "Bypass bloccato: clic per riattivare l'EQ"
+  },
+  "allBands": {
+    "message": "Tutte le bande"
+  },
+  "addBand": {
+    "message": "+ Banda"
+  },
+  "addBandTitle": {
+    "message": "Aggiungi una banda"
+  },
+  "resetGains": {
+    "message": "Azzera guadagni"
+  },
+  "limiter": {
+    "message": "Limitatore"
+  },
+  "limiterTitle": {
+    "message": "Limitatore sull'uscita: evita la distorsione quando alzi molto il guadagno"
+  },
+  "custom": {
+    "message": "Personalizzato"
+  },
+  "myPresets": {
+    "message": "Miei preset"
+  },
+  "preset_flat": {
+    "message": "Piatto"
+  },
+  "preset_bass": {
+    "message": "Bassi +"
+  },
+  "preset_voice": {
+    "message": "Voce / dialoghi"
+  },
+  "preset_treble": {
+    "message": "Alti +"
+  },
+  "preset_loudness": {
+    "message": "Loudness"
+  },
+  "presetSaved": {
+    "message": "Preset \"$1\" salvato."
+  },
+  "presetRenamed": {
+    "message": "Preset rinominato in \"$1\"."
+  },
+  "presetDeleted": {
+    "message": "Preset \"$1\" eliminato."
+  },
+  "otherTabs": {
+    "message": "EQ attivo su $1 altra/e scheda/e"
+  },
+  "errBusy": {
+    "message": "La scheda è già catturata da un'altra estensione (forse un altro equalizzatore)."
+  },
+  "errNoCapture": {
+    "message": "Questa pagina non può essere catturata."
+  },
+  "errInvoke": {
+    "message": "Riapri il popup dalla scheda da equalizzare e riprova."
+  },
+  "errUnknown": {
+    "message": "Errore sconosciuto."
+  },
+  "type_peaking": {
+    "message": "Campana"
+  },
+  "type_lowshelf": {
+    "message": "Shelf bassi"
+  },
+  "type_highshelf": {
+    "message": "Shelf alti"
+  },
+  "type_lowpass": {
+    "message": "Passa-basso"
+  },
+  "type_highpass": {
+    "message": "Passa-alto"
+  },
+  "type_notch": {
+    "message": "Notch"
+  },
+  "type_bandpass": {
+    "message": "Passa-banda"
+  },
+  "filterType": {
+    "message": "Tipo di filtro"
+  },
+  "typeHint_peaking": {
+    "message": "alza o abbassa una zona attorno alla frequenza"
+  },
+  "typeHint_lowshelf": {
+    "message": "alza o abbassa tutto sotto la frequenza"
+  },
+  "typeHint_highshelf": {
+    "message": "alza o abbassa tutto sopra la frequenza"
+  },
+  "typeHint_lowpass": {
+    "message": "toglie tutto sopra la frequenza"
+  },
+  "typeHint_highpass": {
+    "message": "toglie tutto sotto la frequenza (es. rimbombi)"
+  },
+  "typeHint_notch": {
+    "message": "toglie una banda stretta (es. un ronzio o un fischio)"
+  },
+  "typeHint_bandpass": {
+    "message": "lascia passare solo una banda attorno alla frequenza"
+  },
+  "frequency": {
+    "message": "Frequenza"
+  },
+  "gain": {
+    "message": "Guadagno"
+  },
+  "qTitle": {
+    "message": "Q: larghezza di banda (più alto = più stretto)"
+  },
+  "bandOff": {
+    "message": "Spegni la banda"
+  },
+  "bandOn": {
+    "message": "Accendi la banda"
+  },
+  "removeBand": {
+    "message": "Rimuovi la banda"
+  },
+  "bandChip": {
+    "message": "Banda $1: $2 $3 Hz"
+  },
+  "bandChipOff": {
+    "message": "Banda $1: $2 $3 Hz (spenta)"
+  },
+  "noSpectrum": {
+    "message": "Accendi l'EQ per vedere lo spettro di questa scheda"
+  },
+  "bypassTag": {
+    "message": "BYPASS"
+  },
+  "abTag": {
+    "message": "B · EQ ESCLUSO"
+  },
+  "xhPeak": {
+    "message": "picco"
+  },
+  "preamp": {
+    "message": "Preamp"
+  },
+  "modeGraphic": {
+    "message": "Grafico"
+  },
+  "modeParametric": {
+    "message": "Parametrico"
+  },
+  "modeGraphicTitle": {
+    "message": "10 cursori classici: semplice e veloce"
+  },
+  "modeParametricTitle": {
+    "message": "Bande libere con frequenza, guadagno e Q: per correzioni precise. È lo stesso EQ: la curva ti segue"
+  },
+  "approxWarn": {
+    "message": "10 cursori possono solo approssimare questa curva (fino a $1 dB di scarto). Torna indietro senza muoverli per ritrovare le bande originali."
+  },
+  "resetSliders": {
+    "message": "Azzera"
+  },
+  "presetsGraphic": {
+    "message": "Preset grafici"
+  },
+  "presetsParametric": {
+    "message": "Preset parametrici"
+  },
+  "preset_rock": {
+    "message": "Rock"
+  },
+  "preset_pop": {
+    "message": "Pop"
+  },
+  "siteRemember": {
+    "message": "Ricorda queste impostazioni per $1"
+  },
+  "siteRemembered": {
+    "message": "Impostazioni ricordate per $1 · clic per dimenticare"
+  },
+  "siteNA": {
+    "message": "La memoria per sito non è disponibile su questa pagina"
+  },
+  "siteOn": {
+    "message": "$1 userà queste impostazioni"
+  },
+  "siteOff": {
+    "message": "$1 dimenticato"
+  },
+  "importApo": {
+    "message": "Importa AutoEQ / Equalizer APO…"
+  },
+  "exportApo": {
+    "message": "Copia come Equalizer APO"
+  },
+  "importTitle": {
+    "message": "Importa un EQ parametrico"
+  },
+  "importHint": {
+    "message": "Incolla il contenuto di un file ParametricEQ.txt (AutoEQ, Equalizer APO) oppure apri il file."
+  },
+  "openFile": {
+    "message": "Apri file…"
+  },
+  "import": {
+    "message": "Importa"
+  },
+  "cancel": {
+    "message": "Annulla"
+  },
+  "importDone": {
+    "message": "Importati $1 filtri. Salvali come preset per conservarli."
+  },
+  "importPartial": {
+    "message": "Importati $1 filtri su $2 (massimo 10, tipi sconosciuti scartati)."
+  },
+  "importNone": {
+    "message": "Nessun filtro valido trovato."
+  },
+  "exportDone": {
+    "message": "Copiato negli appunti."
+  },
+  "settings": {
+    "message": "Impostazioni"
+  },
+  "secListening": {
+    "message": "Ascolto"
+  },
+  "secAnalyzer": {
+    "message": "Analizzatore"
+  },
+  "matchAB": {
+    "message": "A/B a volume pareggiato"
+  },
+  "matchABTitle": {
+    "message": "Quando ascolti B il volume viene pareggiato a quello con EQ: confronti il suono, non il volume"
+  },
+  "abTagMatched": {
+    "message": "B · EQ ESCLUSO · $1 dB"
+  },
+  "bypassTagMatched": {
+    "message": "BYPASS · $1 dB"
+  }
+}
