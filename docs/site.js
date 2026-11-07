@@ -42,3 +42,22 @@
   systemDark.addEventListener("change", sync);
   sync();
 })();
+
+// Demo video: until play is pressed it is just an image and a link, so opening the page
+// contacts nobody. On click the player is loaded from youtube-nocookie.com.
+// Without JavaScript the link opens the video on YouTube.
+for (const link of document.querySelectorAll("a.video[data-youtube]")) {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const frame = document.createElement("iframe");
+    frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(link.dataset.youtube)}?autoplay=1&rel=0`;
+    frame.title = "Bandwise EQ demo video";
+    frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    frame.allowFullscreen = true;
+    const box = document.createElement("div");
+    box.className = "video";
+    box.append(frame);
+    link.replaceWith(box);
+    frame.focus();
+  });
+}

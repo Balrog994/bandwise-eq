@@ -16,6 +16,8 @@ An equalizer for the sound of your browser tabs in Chrome and Microsoft Edge. Us
 - **Private:** no network access, no analytics and no access to page content. See the [privacy policy](https://bandwise.ilbalrog.it/privacy.html).
 - English and Italian.
 
+Demo video (56 seconds): [English](https://www.youtube.com/watch?v=1cyO4b-tbcw), [Italiano](https://www.youtube.com/watch?v=FUj8eyS_9qg).
+
 ## Install
 
 - **Chrome Web Store:** [Bandwise EQ](https://chromewebstore.google.com/detail/bandwise-eq/pfefhdkgpknkcnjklobgbdjglndbfjmc).
