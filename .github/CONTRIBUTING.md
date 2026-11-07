@@ -8,6 +8,27 @@ Open an [issue](https://github.com/Balrog994/bandwise-eq/issues/new/choose) and 
 
 If you found a security problem, please don't open a public issue. See [SECURITY.md](SECURITY.md) instead.
 
+## Labels
+
+I use labels to sort issues. You don't need to add them yourself, but they help you find your way around:
+
+| Label | Meaning |
+|---|---|
+| `bug` | Something doesn't work as it should |
+| `enhancement` | A new feature or an improvement |
+| `site compatibility` | A problem that happens only on a specific site |
+| `chrome limitation` | Caused by Chrome, DRM or the tabCapture API, so it can't be fixed in the extension |
+| `needs info` | I'm waiting for more details from the person who opened the issue |
+| `translation` | A new language or a fix to the interface text |
+| `accessibility` | Something that makes the extension harder to use for people with disabilities |
+| `documentation` | The README, the website or these guides |
+| `question` | A question rather than a problem |
+| `good first issue` | A small, well-defined task, good if you're new to the code |
+| `help wanted` | I'd welcome help on this one |
+| `duplicate`, `invalid`, `wontfix` | Closed without changes; the issue explains why |
+
+If you'd like to contribute code but don't know where to start, look for `good first issue` or `help wanted`.
+
 ## Before you write code
 
 For anything bigger than a small fix, open an issue first and describe what you'd like to change. That way we can agree on the approach before you spend time on it.
