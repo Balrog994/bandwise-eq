@@ -6,6 +6,8 @@
   <title>Bandwise EQ: privacy policy</title>
   <link rel="icon" href="img/icon-128.png">
   <link rel="stylesheet" href="style.css">
+  <!-- apply the saved theme before the page is drawn, to avoid a flash -->
+  <script>try { const t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch {}</script>
 </head>
 <body>
   <header class="wrap site-head">
@@ -16,6 +18,10 @@
       <a href="./#faq">FAQ</a>
       <a href="privacy.html">Privacy</a>
       <a href="https://github.com/Balrog994/bandwise-eq">GitHub</a>
+      <button class="theme-toggle" type="button" aria-label="Switch theme">
+        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </button>
     </nav>
   </header>
 
@@ -99,5 +105,7 @@
       <a href="https://github.com/Balrog994/bandwise-eq/issues">Report a problem</a>
     </div>
   </footer>
+
+  <script src="site.js"></script>
 </body>
 </html>

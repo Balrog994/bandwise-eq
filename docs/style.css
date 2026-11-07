@@ -4,17 +4,26 @@
   --paper: #f3f5f8; --paper-2: #e8ecf2; --card: #ffffff;
   --ink: #171a20; --ink-2: #4a5260; --ink-3: #7a8392; --line: #d6dce5;
   --link: #1a56c9;
+  color-scheme: light;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
 }
+/* Dark theme: follows the system unless the visitor picked a theme with the toggle
+   (stored as data-theme on <html>). Same greys as the extension's dark display. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    /* same greys as the extension's dark display */
+  :root:not([data-theme="light"]) {
     --paper: #14171c; --paper-2: #1b1f26; --card: #1f242c;
     --ink: #e6e8eb; --ink-2: #b4bac4; --ink-3: #8a919b; --line: #2c323b;
     --link: #8ab4f8;
+    color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --paper: #14171c; --paper-2: #1b1f26; --card: #1f242c;
+  --ink: #e6e8eb; --ink-2: #b4bac4; --ink-3: #8a919b; --line: #2c323b;
+  --link: #8ab4f8;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html { background: var(--paper); scroll-behavior: smooth; }
@@ -28,9 +37,20 @@ img { max-width: 100%; height: auto; display: block; }
 .site-head { display: flex; align-items: center; gap: 10px; padding: 22px 0; }
 .site-head img { width: 28px; height: 28px; }
 .site-head .name { font: 700 19px var(--serif); color: var(--ink); text-decoration: none; }
-.site-head nav { margin-left: auto; display: flex; gap: 22px; font-size: 15px; }
+.site-head nav { margin-left: auto; display: flex; align-items: center; gap: 22px; font-size: 15px; }
 .site-head nav a { color: var(--ink-2); text-decoration: none; }
 .site-head nav a:hover { color: var(--ink); text-decoration: underline; }
+.theme-toggle {
+  display: grid; place-items: center; width: 34px; height: 34px; margin-left: 4px; padding: 0;
+  border: 1px solid var(--line); border-radius: 8px; background: none; color: var(--ink-2); cursor: pointer;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink-3); }
+.theme-toggle:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.theme-toggle svg { width: 18px; height: 18px; }
+/* show the icon of the theme you would switch to */
+.theme-toggle .sun { display: none; }
+.theme-toggle.is-dark .sun { display: block; }
+.theme-toggle.is-dark .moon { display: none; }
 
 h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.15; letter-spacing: -.01em; }
 h1 { font-size: clamp(38px, 5.4vw, 58px); margin: 0 0 18px; }
