@@ -1,0 +1,54 @@
+name: Bug report
+description: Something doesn't work as it should
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. Please check the [FAQ](https://bandwise.ilbalrog.it/#faq) first: some sites with DRM protection can't be processed by any extension.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: site
+    attributes:
+      label: Site
+      description: Where does it happen? For example youtube.com or open.spotify.com.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Turn on the EQ and ...
+        3. ...
+  - type: input
+    id: version
+    attributes:
+      label: Bandwise EQ version
+      description: Shown on the extension card in chrome://extensions.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      description: Copy the first line of chrome://version.
+      placeholder: "Chrome 142.0.0000.00"
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: "Windows 11, macOS 15, ..."
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or anything else
+      description: A screenshot of the popup often helps. You can paste images here.
