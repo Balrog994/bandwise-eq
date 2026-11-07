@@ -1,6 +1,6 @@
 # Bandwise EQ
 
-An equalizer for the sound of your Chrome tabs. Use it to bring out the voices in a podcast, soften harsh highs on a video, add some bass to music on Spotify Web, or correct the sound of your headphones with an AutoEQ profile.
+An equalizer for the sound of your browser tabs in Chrome and Microsoft Edge. Use it to bring out the voices in a podcast, soften harsh highs on a video, add some bass to music on Spotify Web, or correct the sound of your headphones with an AutoEQ profile.
 
 ![Bandwise EQ](docs/img/social.png)
 
@@ -19,9 +19,10 @@ An equalizer for the sound of your Chrome tabs. Use it to bring out the voices i
 ## Install
 
 - **Chrome Web Store:** [Bandwise EQ](https://chromewebstore.google.com/detail/bandwise-eq/pfefhdkgpknkcnjklobgbdjglndbfjmc).
+- **Microsoft Edge Add-ons:** [Bandwise EQ](https://microsoftedge.microsoft.com/addons/detail/ndgnjdgkncfkpemcapnbbpcjgmkjfijc).
 - **From source:** clone this repository, open `chrome://extensions`, enable *Developer mode*, click *Load unpacked* and select the repository folder.
 
-Requires Chrome 116 or later.
+Requires Chrome or Edge 116 or later.
 
 ## How it works
 

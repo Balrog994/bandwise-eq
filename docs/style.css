@@ -34,7 +34,7 @@ img { max-width: 100%; height: auto; display: block; }
 .narrow { max-width: 680px; }
 
 /* header */
-.site-head { display: flex; align-items: center; gap: 10px; padding: 22px 0; }
+.site-head { display: flex; align-items: center; gap: 10px; padding-block: 22px; }
 .site-head img { width: 28px; height: 28px; }
 .site-head .name { font: 700 19px var(--serif); color: var(--ink); text-decoration: none; }
 .site-head nav { margin-left: auto; display: flex; align-items: center; gap: 22px; font-size: 15px; }
@@ -58,13 +58,14 @@ h2 { font-size: clamp(28px, 3.4vw, 36px); margin: 0 0 14px; }
 h3 { font-size: 21px; margin: 0 0 8px; }
 
 /* hero */
-.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; padding: 40px 0 72px; }
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; padding-block: 40px 72px; }
 .hero p.lead { font-size: 20px; color: var(--ink-2); margin: 0 0 26px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
 .button {
   display: inline-block; padding: 11px 20px; border-radius: 8px; font-weight: 600; font-size: 16px;
   background: var(--ink); color: var(--paper); text-decoration: none;
 }
+.button.secondary { background: none; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink-3); }
 .button:hover { opacity: .88; }
 .button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
 .small { font-size: 15px; color: var(--ink-3); margin-top: 18px; }
@@ -77,16 +78,16 @@ figure { margin: 0; }
 figcaption { font-size: 14px; color: var(--ink-3); margin-top: 10px; }
 
 /* "why I made it" note */
-.note { background: var(--paper-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 56px 0; }
+.note { background: var(--paper-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: 56px; }
 .note p { font-family: var(--serif); font-size: 20px; line-height: 1.6; margin: 0 0 16px; }
 .note .sign { font-family: var(--sans); font-size: 15px; color: var(--ink-3); margin-top: 22px; }
 .note .sign strong { color: var(--ink); }
 
 /* tour */
-.tour { padding: 72px 0 24px; }
+.tour { padding-block: 72px 24px; }
 .tour > .wrap > h2 { margin-bottom: 8px; }
 .tour .intro { color: var(--ink-2); margin: 0 0 40px; max-width: 640px; }
-.step { display: grid; grid-template-columns: 1fr 1.25fr; gap: 48px; align-items: center; padding: 40px 0; border-top: 1px solid var(--line); }
+.step { display: grid; grid-template-columns: 1fr 1.25fr; gap: 48px; align-items: center; padding-block: 40px; border-top: 1px solid var(--line); }
 .step:nth-of-type(even) { grid-template-columns: 1.25fr 1fr; }
 .step:nth-of-type(even) .step-text { order: 2; }
 .step p { color: var(--ink-2); margin: 0 0 14px; }
@@ -95,13 +96,13 @@ figcaption { font-size: 14px; color: var(--ink-3); margin-top: 10px; }
 kbd, code { font-family: var(--mono); font-size: .9em; background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
 
 /* getting started */
-.start { padding: 56px 0; }
+.start { padding-block: 56px; }
 .start ol { padding-left: 22px; margin: 0; }
 .start li { margin: 8px 0; color: var(--ink-2); }
 .start li strong { color: var(--ink); }
 
 /* FAQ */
-.faq { padding: 24px 0 72px; }
+.faq { padding-block: 24px 72px; }
 .faq details { border-top: 1px solid var(--line); padding: 14px 0; }
 .faq details:last-of-type { border-bottom: 1px solid var(--line); }
 .faq summary { cursor: pointer; font-weight: 600; font-size: 18px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
@@ -111,7 +112,7 @@ kbd, code { font-family: var(--mono); font-size: .9em; background: var(--paper-2
 .faq details p { color: var(--ink-2); margin: 10px 0 4px; }
 
 /* footer */
-.site-foot { border-top: 1px solid var(--line); padding: 28px 0 48px; font-size: 15px; color: var(--ink-3); }
+.site-foot { border-top: 1px solid var(--line); padding-block: 28px 48px; font-size: 15px; color: var(--ink-3); }
 .site-foot .wrap { display: flex; flex-wrap: wrap; gap: 10px 24px; }
 .site-foot .grow { flex: 1; min-width: 260px; }
 .site-foot a { color: var(--ink-2); }
@@ -122,7 +123,7 @@ dialog.zoom::backdrop { background: rgba(10, 13, 18, .85); }
 dialog.zoom img { max-width: 96vw; max-height: 94vh; width: auto; border-radius: 10px; cursor: zoom-out; }
 
 /* privacy page */
-.doc { padding: 24px 0 72px; }
+.doc { padding-block: 24px 72px; }
 .doc h1 { font-size: 42px; margin-bottom: 4px; }
 .doc .date { color: var(--ink-3); margin: 0 0 28px; }
 .doc h2 { font-size: 24px; margin: 34px 0 8px; }
@@ -138,5 +139,10 @@ dialog.zoom img { max-width: 96vw; max-height: 94vh; width: auto; border-radius:
   .step:nth-of-type(even) .step-text { order: 0; }
   .site-head nav { gap: 14px; font-size: 14px; }
   .hero { padding-top: 16px; }
+}
+@media (max-width: 480px) {
+  .site-head .name { white-space: nowrap; }
+  /* both links are also in the footer */
+  .site-head nav a[href$="privacy.html"], .site-head nav a[href^="https://github.com"] { display: none; }
 }
 dialog.zoom:focus, dialog.zoom:focus-visible { outline: none; }
