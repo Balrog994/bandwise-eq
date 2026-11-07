@@ -1,5 +1,5 @@
-// Service worker: ottiene lo stream della scheda e gestisce il documento offscreen
-// (invisibile) dove gira l'elaborazione audio. Nessuna finestra viene aperta.
+// Service worker: obtains the tab's stream and manages the (invisible) offscreen document
+// where the audio processing runs. No window is opened.
 
 async function hasOffscreen() {
   const ctxs = await chrome.runtime.getContexts({ contextTypes: ["OFFSCREEN_DOCUMENT"] });
@@ -23,7 +23,7 @@ async function setBadge(tabId, on) {
   try {
     await chrome.action.setBadgeText({ tabId, text: on ? "EQ" : "" });
     if (on) await chrome.action.setBadgeBackgroundColor({ tabId, color: "#1a73e8" });
-  } catch { /* scheda già chiusa */ }
+  } catch { /* tab already closed */ }
 }
 
 async function closeIfIdle() {
@@ -57,7 +57,7 @@ async function handle(msg) {
       return { ok: true };
     }
 
-    case "ended": // la scheda è stata chiusa o la cattura è terminata
+    case "ended": // the tab was closed or the capture ended
       await setBadge(msg.tabId, false);
       await closeIfIdle();
       return { ok: true };
@@ -70,8 +70,8 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   return true;
 });
 
-// Ogni scheda ha la sua configurazione in chrome.storage.session ("tab:<id>"):
-// quando la scheda viene chiusa non serve più.
+// Each tab has its own configuration in chrome.storage.session ("tab:<id>"):
+// once the tab is closed it is no longer needed.
 chrome.tabs.onRemoved.addListener((tabId) => {
   chrome.storage.session.remove("tab:" + tabId);
 });

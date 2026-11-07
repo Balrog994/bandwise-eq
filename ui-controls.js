@@ -1,16 +1,16 @@
-// Controlli custom in stile plugin audio: manopola + campo valore, fader verticale, meter L/R.
-// Gesti comuni: trascina in verticale · rotella · Shift = fine · doppio clic = valore di default.
+// Custom audio-plugin-style controls: knob + value field, vertical fader, L/R meter.
+// Common gestures: vertical drag · wheel · Shift = fine · double-click = default value.
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const FINE_FACTOR = 0.25;
 
-// Rotella → numero di "passi" (anche frazionari), positivo = verso l'alto.
-// Proporzionale al delta: una tacca del mouse (~100 px) = 1 passo, i trackpad con inerzia
-// (Mac) producono tanti piccoli delta che diventano frazioni di passo invece di passi interi.
-// Ritorna 0 per gli eventi da ignorare: pinch-zoom (Ctrl) e swipe orizzontali senza Shift.
+// Wheel → number of "steps" (possibly fractional), positive = up.
+// Proportional to the delta: one mouse wheel notch (~100 px) = 1 step; inertial trackpads
+// (Mac) produce many small deltas that become fractions of a step instead of whole steps.
+// Returns 0 for events to ignore: pinch-zoom (Ctrl) and horizontal swipes without Shift.
 function wheelSteps(e) {
   if (e.ctrlKey) return 0;
-  // Shift+rotella su Windows arriva come scroll orizzontale
+  // On Windows, Shift+wheel arrives as horizontal scroll
   const d = e.deltaY || (e.shiftKey ? e.deltaX : 0);
   if (!d) return 0;
   const px = e.deltaMode === 1 ? d * 33 : e.deltaMode === 2 ? d * 300 : d;
@@ -18,7 +18,7 @@ function wheelSteps(e) {
 }
 
 // ---------------------------------------------------------------------------
-// ValueControl: manopola opzionale + campo di testo modificabile + unità.
+// ValueControl: optional knob + editable text field + unit.
 // opts: min, max, scale ("lin"|"log"), def, decimals, bipolar, knob (bool),
 //       format(v) → { text, unit }, parse(text, ctrl) → number|NaN, onChange(v, final)
 // ---------------------------------------------------------------------------
@@ -27,7 +27,7 @@ class ValueControl {
     this.o = { scale: "lin", decimals: 1, knob: true, bipolar: false, dragPixels: 180, ...opts };
     this.value = this.o.def ?? this.o.min;
     this.disabled = false;
-    this.dirty = false; // true mentre il campo contiene testo digitato e non ancora confermato
+    this.dirty = false; // true while the field holds typed text not yet committed
 
     this.el = document.createElement("div");
     this.el.className = "vc";
@@ -86,11 +86,11 @@ class ValueControl {
     this.o.onChange?.(v, final);
   }
   nudge(steps, fine) {
-    // un passo = 1% della corsa (0,25% con Shift)
+    // one step = 1% of the travel (0.25% with Shift)
     this.emit(this.fromNorm(this.toNorm(this.value) + steps * (fine ? 0.0025 : 0.01)), true);
   }
-  // Come nudge, ma accumula le frazioni: i piccoli delta del trackpad non vengono
-  // persi nell'arrotondamento del valore.
+  // Like nudge, but accumulates fractions: small trackpad deltas are not
+  // lost when the value is rounded.
   wheel(steps, fine) {
     const now = performance.now();
     if (this.wheelN === undefined || now - this.wheelT > 400 || this.wheelV !== this.value) this.wheelN = this.toNorm(this.value);
@@ -106,7 +106,7 @@ class ValueControl {
   }
   render() {
     const { text, unit } = this.text();
-    // il testo segue il valore, tranne quando l'utente ci sta scrivendo (dirty)
+    // the text follows the value, except while the user is typing in it (dirty)
     if (!this.dirty) {
       const focused = document.activeElement === this.field;
       this.field.value = text;
@@ -136,7 +136,7 @@ class ValueControl {
     this.knob.querySelector(".k-ptr").setAttribute("transform", `rotate(${aVal.toFixed(1)} 16 16)`);
   }
 
-  // Applica il testo digitato; se non è stato modificato non fa nulla.
+  // Applies the typed text; does nothing if it wasn't modified.
   commitField() {
     if (!this.dirty) return;
     this.dirty = false;
@@ -152,7 +152,7 @@ class ValueControl {
       this.knob.addEventListener("pointerdown", (e) => {
         if (this.disabled || e.button !== 0) return;
         e.preventDefault();
-        // se il campo ha il focus: conferma l'eventuale testo digitato e lascia il campo
+        // if the field has focus: commit any typed text and leave the field
         if (document.activeElement === this.field) { this.commitField(); this.field.blur(); }
         this.knob.setPointerCapture(e.pointerId);
         drag = { y: e.clientY, n: this.toNorm(this.value) };
@@ -178,8 +178,8 @@ class ValueControl {
         if (!this.disabled && this.o.def !== undefined) this.emit(this.o.def, true);
       });
     }
-    // rotella: sulla manopola sempre; sul campo solo mentre ha il focus,
-    // così nelle liste lunghe si può scorrere la pagina passando sopra i valori
+    // wheel: always on the knob; on the field only while it has focus,
+    // so in long lists the page can be scrolled while hovering over the values
     this.el.addEventListener("wheel", (e) => {
       if (this.disabled) return;
       if (!this.knob?.contains(e.target) && document.activeElement !== this.field) return;
@@ -199,7 +199,7 @@ class ValueControl {
       else if (e.key === "Escape") { e.stopPropagation(); this.dirty = false; this.render(); this.field.blur(); }
       else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault();
-        this.commitField(); // se avevi scritto qualcosa, le frecce partono da quel valore
+        this.commitField(); // if you had typed something, the arrows start from that value
         this.nudge(e.key === "ArrowUp" ? 1 : -1, e.shiftKey);
       }
     });
@@ -207,14 +207,14 @@ class ValueControl {
 }
 
 // ---------------------------------------------------------------------------
-// Fader verticale con scala. opts: min, max, def, ticks[], onChange(v, final)
+// Vertical fader with scale. opts: min, max, def, ticks[], onChange(v, final)
 // ---------------------------------------------------------------------------
 class Fader {
   constructor(host, opts) {
     this.o = { decimals: 1, ...opts };
     this.value = this.o.def ?? 0;
     host.classList.add("fader");
-    if (this.o.compact) host.classList.add("compact"); // senza scala: cursori della modalità grafica
+    if (this.o.compact) host.classList.add("compact"); // no scale: graphic-mode sliders
     host.innerHTML = '<div class="f-scale"></div><div class="f-track"><div class="f-fill"></div><div class="f-zero"></div><div class="f-cap"></div></div>';
     this.track = host.querySelector(".f-track");
     this.cap = host.querySelector(".f-cap");
@@ -228,14 +228,14 @@ class Fader {
       scale.append(s);
     }
     host.querySelector(".f-zero").style.top = (1 - this.norm(0)) * 100 + "%";
-    // tacche ai lati del binario (opzione marks: { step, major }), dietro al cappuccio
+    // ticks on the sides of the groove (marks option: { step }), behind the cap
     if (this.o.marks) {
-      const { step, major } = this.o.marks;
+      const { step } = this.o.marks;
       for (let v = this.o.min; v <= this.o.max + 1e-9; v += step) {
-        if (Math.abs(v) < 1e-9) continue; // lo zero ha già la sua linea
+        if (Math.abs(v) < 1e-9) continue; // zero already has its own line
         const tk = document.createElement("div");
         const end = Math.abs(v - this.o.min) < 1e-9 || Math.abs(v - this.o.max) < 1e-9;
-        tk.className = "f-tick" + (Math.abs(v) % major < 1e-9 ? " major" : "") + (end ? " end" : "");
+        tk.className = "f-tick" + (end ? " end" : "");
         tk.style.top = (1 - this.norm(v)) * 100 + "%";
         this.track.insertBefore(tk, this.cap);
       }
@@ -249,7 +249,7 @@ class Fader {
   render() {
     const v = this.norm(this.value), z = this.norm(0);
     this.cap.style.top = (1 - v) * 100 + "%";
-    if (this.fill) { // dallo zero al cappuccio: si vede subito quanto si alza o si abbassa
+    if (this.fill) { // from zero to the cap: shows at a glance how much it boosts or cuts
       this.fill.style.top = (1 - Math.max(v, z)) * 100 + "%";
       this.fill.style.height = Math.abs(v - z) * 100 + "%";
     }
@@ -270,7 +270,7 @@ class Fader {
       e.preventDefault();
       this.host.setPointerCapture(e.pointerId);
       const r = this.track.getBoundingClientRect();
-      // clic sulla traccia fuori dal cappuccio: salta lì; sul cappuccio: trascinamento relativo
+      // click on the track outside the cap: jump there; on the cap: relative drag
       if (!this.cap.contains(e.target)) this.emit(this.o.min + (1 - clamp01((e.clientY - r.top) / r.height)) * range);
       drag = { y: e.clientY, v: this.value, h: r.height };
       this.host.classList.add("active");
@@ -286,7 +286,7 @@ class Fader {
     this.host.addEventListener("pointerup", end);
     this.host.addEventListener("pointercancel", end);
     this.host.addEventListener("dblclick", () => this.emit(this.o.def ?? 0, true));
-    // rotella proporzionale con accumulo delle frazioni (trackpad)
+    // proportional wheel with fraction accumulation (trackpad)
     let wv, wt = 0;
     this.host.addEventListener("wheel", (e) => {
       if (e.ctrlKey) return;
@@ -303,7 +303,7 @@ class Fader {
 }
 
 // ---------------------------------------------------------------------------
-// Meter stereo: picco con decadimento, indicatore del massimo, LED di clip.
+// Stereo meter: peak with decay, peak-hold indicator, clip LED.
 // ---------------------------------------------------------------------------
 class Meter {
   constructor(canvas, clipEl) {
@@ -325,7 +325,7 @@ class Meter {
     this.c.width = Math.round(this.w * dpr); this.c.height = Math.round(this.h * dpr);
     this.g.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-  // m = { l: {peak, rms}, r: {peak, rms} } oppure null (silenzio / EQ spento)
+  // m = { l: {peak, rms}, r: {peak, rms} } or null (silence / EQ off)
   update(m) {
     const now = performance.now();
     const dt = Math.min(0.1, (now - this.last) / 1000);
@@ -333,8 +333,8 @@ class Meter {
     const ch = m ? [m.l, m.r] : [null, null];
     ch.forEach((c, i) => {
       const p = c ? c.peak : this.MIN - 10;
-      this.lvl[i] = p > this.lvl[i] ? p : Math.max(p, this.lvl[i] - 24 * dt); // attacco istantaneo, rilascio 24 dB/s
-      // massimo: resta fermo 1,2 s, poi scende di 18 dB/s
+      this.lvl[i] = p > this.lvl[i] ? p : Math.max(p, this.lvl[i] - 24 * dt); // instant attack, 24 dB/s release
+      // peak hold: stays put for 1.2 s, then falls at 18 dB/s
       if (p >= this.hold[i]) { this.hold[i] = p; this.holdT[i] = now; }
       else if (now - this.holdT[i] > 1200) this.hold[i] = Math.max(p, this.hold[i] - 18 * dt);
       if (c && c.peak > -0.3 && !this.clipped) { this.clipped = true; this.clipEl.classList.add("on"); }
@@ -369,7 +369,7 @@ class Meter {
         g.fillRect(x, Math.max(0, this.y(this.hold[i]) - 1), bw, 2);
       }
     }
-    // tacche ogni 6 dB
+    // ticks every 6 dB
     g.fillStyle = "rgba(0,0,0,0.45)";
     for (let db = -6; db > this.MIN; db -= 6) g.fillRect(0, Math.round(this.y(db)), w, 1);
   }

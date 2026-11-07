@@ -1,4 +1,4 @@
-/* L'intestazione segue il tema di sistema; il display (grafico, strip, bande) è sempre scuro. */
+/* The header follows the system theme; the display (graph, strip, bands) is always dark. */
 :root {
   --bg: #ffffff; --fg: #1f1f1f; --muted: #6b6b6b; --line: #e3e3e3; --hover: #f1f3f4;
   --accent: #1a73e8; --accent-fg: #ffffff; --danger: #c5221f; --on: #188038;
@@ -16,12 +16,12 @@
   }
 }
 * { box-sizing: border-box; }
-/* Il popup non scorre mai: la scrollbar di Chrome sul popup sposterebbe il contenuto.
-   Nella vista avanzata la lista delle bande è alta al massimo 5 righe e oltre scorre da sola;
-   con 5 bande il popup arriva a ~595 px, sotto il limite di 600 imposto da Chrome. */
+/* The popup never scrolls: Chrome's scrollbar on the popup would shift the content.
+   In the advanced view the band list is at most 5 rows tall and scrolls on its own beyond that;
+   with 5 bands the popup reaches ~595 px, under the 600 limit imposed by Chrome. */
 html { background: var(--bg); overflow: hidden; }
 body.adv { padding-bottom: 8px; }
-body.adv canvas#graph { height: 260px; } /* margine di ~13 px sotto il limite di 600 */
+body.adv canvas#graph { height: 260px; } /* ~13 px margin under the 600 limit */
 body:not(.adv) .adv-only, body.adv .simple-only { display: none !important; }
 body {
   margin: 0; padding: 10px 12px 12px; width: 572px; background: var(--bg); color: var(--fg);
@@ -32,7 +32,7 @@ button, select, input { font: inherit; color: inherit; }
 svg { display: block; width: 100%; height: 100%; }
 .spacer { flex: 1; }
 
-/* ---------- pulsanti ---------- */
+/* ---------- buttons ---------- */
 .btn {
   border: 1px solid var(--line); background: var(--bg); border-radius: 7px;
   padding: 4px 10px; cursor: pointer; white-space: nowrap;
@@ -50,7 +50,7 @@ svg { display: block; width: 100%; height: 100%; }
 .icon-btn:disabled { opacity: .3; cursor: default; }
 .icon-btn.small { width: 24px; height: 24px; padding: 4px; }
 
-/* ---------- select personalizzate ---------- */
+/* ---------- custom selects ---------- */
 .select { position: relative; display: flex; }
 .select select {
   appearance: none; width: 100%; padding: 3px 24px 3px 8px; border-radius: 6px; cursor: pointer;
@@ -66,7 +66,7 @@ svg { display: block; width: 100%; height: 100%; }
 .select.light select:hover { border-color: var(--muted); }
 .select.light::after { color: var(--muted); }
 
-/* ---------- intestazione ---------- */
+/* ---------- header ---------- */
 .top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .brand { display: flex; align-items: center; gap: 7px; }
 .brand h1 { font-size: 15px; margin: 0; font-weight: 650; letter-spacing: .2px; }
@@ -96,7 +96,7 @@ svg { display: block; width: 100%; height: 100%; }
 .switch-label { width: 26px; font-size: 11px; font-weight: 650; color: var(--muted); }
 .switch input:checked ~ .switch-label { color: var(--on); }
 
-/* avviso sovrapposto: non occupa spazio, così non cambia l'altezza del popup */
+/* overlaid notice: takes up no space, so it doesn't change the popup height */
 .status {
   position: absolute; top: 46px; left: 50%; transform: translateX(-50%); z-index: 50;
   width: max-content; max-width: 520px; padding: 6px 12px; border-radius: 8px; font-size: 12px; line-height: 1.4;
@@ -145,7 +145,7 @@ svg { display: block; width: 100%; height: 100%; }
 .main { display: grid; grid-template-columns: 1fr 78px; }
 canvas#graph { display: block; width: 100%; height: 280px; touch-action: none; cursor: crosshair; }
 
-/* ---------- strip del preamp ---------- */
+/* ---------- preamp strip ---------- */
 .strip {
   display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 4px 6px 8px;
   border-left: 1px solid var(--d-line); background: var(--d-panel);
@@ -176,7 +176,7 @@ canvas#graph { display: block; width: 100%; height: 280px; touch-action: none; c
 .meter-box { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 17px; padding-top: 1px; }
 .clip { width: 100%; height: 5px; border-radius: 2px; background: #3a1d1d; cursor: pointer; flex: none; }
 .clip.on { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
-/* base 0: l'altezza in pixel assegnata al canvas non deve impedire alla strip di restringersi */
+/* basis 0: the pixel height assigned to the canvas must not prevent the strip from shrinking */
 #meter { flex: 1 1 0; height: 0; width: 100%; min-height: 0; display: block; }
 .meter-lr { display: flex; justify-content: space-between; width: 100%; font-size: 8px; color: var(--d-muted); }
 
@@ -200,7 +200,7 @@ canvas#graph { display: block; width: 100%; height: 280px; touch-action: none; c
 .ab.locked .a, .ab.locked .slash { color: rgba(255, 255, 255, .55); }
 .ab.locked .b, .ab.locked .lock { color: #fff; display: block; }
 
-/* ---------- manopole e campi valore ---------- */
+/* ---------- knobs and value fields ---------- */
 .vc { display: flex; align-items: center; gap: 3px; }
 .knob { width: 28px; height: 28px; flex: none; cursor: ns-resize; touch-action: none; }
 .knob .k-track { fill: none; stroke: #2a3039; stroke-width: 3; stroke-linecap: round; }
@@ -217,7 +217,7 @@ canvas#graph { display: block; width: 100%; height: 280px; touch-action: none; c
 .vu { width: 19px; font-size: 10px; color: var(--d-muted); }
 .vc.disabled { opacity: .3; pointer-events: none; }
 
-/* ---------- impostazioni analizzatore ---------- */
+/* ---------- analyzer settings ---------- */
 .an-panel {
   position: absolute; top: 34px; right: 86px; z-index: 25; width: 330px; padding: 12px;
   background: #1c2027; border: 1px solid var(--d-line2); border-radius: 10px;
@@ -231,7 +231,7 @@ canvas#graph { display: block; width: 100%; height: 280px; touch-action: none; c
 .an-grid .vu { display: none; }
 .an-info { margin-top: 9px; font-size: 11px; color: var(--d-muted); font-variant-numeric: tabular-nums; }
 
-/* ---------- barra delle bande ---------- */
+/* ---------- band bar ---------- */
 .bandbar { background: var(--d-bar); border-top: 1px solid var(--d-line); border-radius: 0 0 11px 11px; padding: 6px 8px 6px; }
 .display:has(.advanced:not([hidden])) .bandbar { border-radius: 0; }
 .bandbar-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -253,7 +253,7 @@ canvas#graph { display: block; width: 100%; height: 280px; touch-action: none; c
 }
 .add-chip:hover:not(:disabled) { color: var(--d-fg); border-color: var(--d-muted); }
 .add-chip:disabled { opacity: .3; cursor: default; }
-/* "Tutte le bande": pulsante a icona (lista + freccetta), il testo è nel suggerimento */
+/* "All bands": icon button (list + small arrow), the text is in the tooltip */
 .mode-btn {
   display: flex; align-items: center; gap: 1px; height: 26px; padding: 0 3px 0 6px; border-radius: 6px; cursor: pointer; flex: none;
   background: none; border: 1px solid var(--d-line); color: var(--d-muted);
@@ -264,7 +264,7 @@ canvas#graph { display: block; width: 100%; height: 280px; touch-action: none; c
 .mode-btn[aria-expanded="true"] { color: var(--d-accent); background: var(--d-hover); border-color: var(--d-line2); }
 .mode-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
 
-/* riga di controlli di una banda (barra e lista avanzata) */
+/* control row for one band (bar and advanced list) */
 .band-row { display: flex; align-items: center; gap: 4px; }
 .band-row.editor { margin-top: 6px; }
 .type-seg { display: flex; gap: 1px; padding: 2px; border-radius: 7px; flex: none; background: #0b0d10; border: 1px solid var(--d-line); }
@@ -285,10 +285,10 @@ canvas#graph { display: block; width: 100%; height: 280px; touch-action: none; c
 .band-row.off .num-chip { opacity: .35; }
 .band-row.off .vc, .band-row.off .type-seg { opacity: .45; }
 
-/* ---------- vista avanzata ---------- */
+/* ---------- advanced view ---------- */
 .advanced { border-top: 1px solid var(--d-line); background: var(--d-panel); border-radius: 0 0 11px 11px; }
-/* unica area che scorre (altezza massima = 5 righe, impostata da popup.js);
-   spazio della scrollbar riservato, così le righe non si spostano */
+/* the only scrolling area (max height = 5 rows, set by popup.js);
+   scrollbar space reserved, so the rows don't shift */
 .band-list {
   overflow-y: auto; border-radius: 0 0 11px 11px;
   scrollbar-gutter: stable; scrollbar-width: thin; scrollbar-color: #3a414c transparent;
@@ -302,7 +302,7 @@ canvas#graph { display: block; width: 100%; height: 280px; touch-action: none; c
 .mini-switch input:checked + .track { background: var(--d-on); }
 .mini-switch input:checked + .track .thumb { transform: translateX(14px); }
 
-/* ---------- modalità grafica / parametrica ---------- */
+/* ---------- graphic / parametric mode ---------- */
 body.graphic .param-only, body:not(.graphic) .graphic-only { display: none !important; }
 
 .seg { display: flex; padding: 2px; gap: 2px; border-radius: 8px; background: #0b0d10; border: 1px solid var(--d-line); flex: none; }
@@ -313,38 +313,59 @@ body.graphic .param-only, body:not(.graphic) .graphic-only { display: none !impo
 .seg-btn svg { width: 16px; height: 16px; flex: none; }
 .seg-btn:hover { color: var(--d-fg); }
 .seg-btn[aria-pressed="true"] { background: var(--d-hover); color: var(--d-accent); box-shadow: 0 0 0 1px var(--d-line2) inset; }
+/* Advanced view: the mode selector shows icons only (the label stays in the tooltip),
+   so the list toolbar fits on one row and the popup stays under 600 px. */
+body.adv .seg-btn { padding: 3px 6px; }
+body.adv .seg-btn span { display: none; }
 
-/* banco di cursori della modalità grafica */
+/* graphic-mode slider bank */
 .gbank { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; padding: 8px 4px 2px; }
 .gcol { display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .gval { font-size: 10.5px; color: var(--c); font-weight: 600; font-variant-numeric: tabular-nums; height: 13px; }
 .gval.zero { color: var(--d-muted); font-weight: 400; }
 .gcol .fader { height: 104px; width: 26px; }
-.gfreq { font-size: 10px; color: var(--d-muted); }
+.gfreq { font-size: 10px; color: var(--d-muted); transition: color .15s; }
+.gcol:hover .gfreq { color: var(--c); }
 .fader.compact .f-scale { display: none; }
 .fader.compact .f-cap { width: 22px; }
-/* cursori colorati: riempimento dallo zero e linea del cappuccio nel colore della banda */
+
+/* Colored sliders, in the style of 80s/90s hi-fi equalizers. Everything takes the band color (--c):
+   groove, fill from 0 dB to the cap, cap line, ticks and 0 dB line. */
+.gcol .f-track::before {
+  width: 5px;
+  border-radius: 0; /* square ends: the groove stops exactly on the ±12 dB end lines */
+  /* enough color over a grey (not black) base, so the groove always stands out from the ticks */
+  background: color-mix(in oklch, var(--c) 32%, #2a2f37);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--c) 30%, #1a1d22) inset;
+}
 .f-fill {
-  position: absolute; left: 50%; width: 6px; transform: translateX(-50%); border-radius: 3px;
+  position: absolute; left: 50%; width: 5px; transform: translateX(-50%); border-radius: 3px;
   background: var(--c); opacity: .9; box-shadow: 0 0 6px color-mix(in oklch, var(--c) 45%, transparent);
 }
 .gcol .f-cap::after { background: var(--c); height: 2px; top: 4.5px; opacity: 1; }
 .gcol .fader:hover .f-cap, .gcol .fader.active .f-cap { box-shadow: 0 2px 4px rgba(0, 0, 0, .6), 0 0 0 1px var(--c); }
-.gfreq { transition: color .15s; }
-.gcol:hover .gfreq { color: var(--c); }
+.gcol .f-zero { left: -1px; right: -1px; background: color-mix(in oklch, var(--c) 45%, #d5d9df); opacity: .9; }
+/* ticks every 3 dB: short, faint marks beside the groove, all alike */
+.f-tick {
+  --tk: color-mix(in oklch, var(--c, var(--d-muted)) 55%, #3a404a);
+  position: absolute; left: 8px; right: 8px; height: 1px; pointer-events: none; opacity: .6;
+  background: linear-gradient(90deg, var(--tk) 0 25%, transparent 25% 75%, var(--tk) 75% 100%);
+}
+/* scale ends (±12 dB): one solid line across, like an end stop */
+.f-tick.end { left: 6.5px; right: 6.5px; background: var(--tk); }
 
-/* ---------- puntina (memoria per sito) e popover ---------- */
+/* ---------- site pin and preset popover ---------- */
 .icon-btn.pin[aria-pressed="true"] { color: var(--accent); }
 .icon-btn.pin[aria-pressed="true"] path { fill: currentColor; fill-opacity: .25; }
 .pop-row.apo { flex-direction: column; align-items: stretch; gap: 2px; padding-top: 6px; border-top: 1px solid var(--line); }
 .btn.link { border-color: transparent; background: none; text-align: left; color: var(--accent); padding: 3px 6px; }
 .btn.link:hover { background: var(--hover); }
 
-/* ---------- pannello impostazioni: sezioni ---------- */
+/* ---------- settings panel: sections ---------- */
 .an-sec { margin: 10px 0 6px; font-size: 10.5px; letter-spacing: .8px; text-transform: uppercase; color: var(--d-muted); font-weight: 600; }
 .an-panel .an-sec:first-of-type { margin-top: 2px; }
 
-/* ---------- finestra di import ---------- */
+/* ---------- import dialog ---------- */
 .dialog {
   position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px;
   background: rgba(0, 0, 0, .45);
@@ -355,44 +376,11 @@ body.graphic .param-only, body:not(.graphic) .graphic-only { display: none !impo
 }
 .dialog-title { font-weight: 650; font-size: 14px; }
 .dialog-hint { margin: 6px 0 10px; font-size: 12px; color: var(--muted); }
+.dialog-hint a, .dialog-steps a { color: var(--accent); }
+.dialog-steps { margin: 8px 0 6px; padding-left: 20px; font-size: 12.5px; line-height: 1.6; }
+.dialog-steps b { font-weight: 600; }
 .dialog textarea {
   width: 100%; height: 170px; resize: none; padding: 8px; border-radius: 8px; border: 1px solid var(--line);
   background: var(--bg); color: var(--fg); font: 12px/1.45 ui-monospace, Consolas, monospace; white-space: pre;
 }
 .dialog-actions { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
-
-/* Vista avanzata: il selettore di modalità mostra solo le icone (il testo resta nel suggerimento),
-   così la riga dei comandi della lista sta su una riga e il popup resta sotto i 600 px. */
-body.adv .seg-btn { padding: 3px 6px; }
-body.adv .seg-btn span { display: none; }
-/* binario dei cursori grafici: leggera tinta del colore della banda */
-.gcol .f-track::before {
-  width: 5px;
-  /* abbastanza colore e un fondo grigio (non nero): il binario resta sempre più visibile delle tacche */
-  background: color-mix(in oklch, var(--c) 32%, #2a2f37);
-  box-shadow: 0 0 0 1px color-mix(in oklch, var(--c) 30%, #1a1d22) inset;
-}
-.gcol .f-fill { width: 5px; }
-
-/* tacche dei cursori grafici, in stile equalizzatori hi-fi: ogni 3 dB, più lunghe a ±6 e ±12;
-   lo zero resta la linea più lunga */
-.f-tick {
-  position: absolute; left: 6px; right: 6px; height: 1px; pointer-events: none;
-  background: linear-gradient(90deg, var(--d-muted) 0 32%, transparent 32% 68%, var(--d-muted) 68% 100%);
-  opacity: .3;
-}
-.f-tick.major { left: 3px; right: 3px; background: linear-gradient(90deg, var(--d-muted) 0 37%, transparent 37% 63%, var(--d-muted) 63% 100%); opacity: .45; }
-.gcol .f-zero { left: -1px; right: -1px; opacity: .85; }
-/* tacche e zero dei cursori grafici in tinta con il binario (niente grigio accanto al colore).
-   Segni brevi accanto al binario (5 px al centro), tutti uguali: ~2,5 px per lato, tenui. */
-.gcol .f-tick {
-  --tk: color-mix(in oklch, var(--c) 55%, #3a404a);
-  left: 8px; right: 8px;
-  background: linear-gradient(90deg, var(--tk) 0 25%, transparent 25% 75%, var(--tk) 75% 100%);
-  opacity: .6;
-}
-.gcol .f-zero { background: color-mix(in oklch, var(--c) 45%, #d5d9df); opacity: .9; }
-/* estremi della scala (±12 dB): linea unica da lato a lato, come un fine corsa;
-   il binario è squadrato e finisce esattamente su queste linee */
-.gcol .f-track::before { border-radius: 0; }
-.gcol .f-tick.end { left: 6.5px; right: 6.5px; background: var(--tk); }

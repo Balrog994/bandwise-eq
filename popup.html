@@ -120,7 +120,7 @@
           <button id="modeParam" class="seg-btn" data-i18n-title="modeParametricTitle" data-i18n-aria="modeParametric"><svg viewBox="0 0 24 24"><path d="M3 16c4 0 4-9 7-9s3 9 6 9 3-4 5-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="7" r="2.2" fill="currentColor"/></svg><span data-i18n="modeParametric"></span></button>
         </div>
         <div id="chips" class="chips simple-only param-only"></div>
-        <!-- in vista avanzata i bollini lasciano il posto ai comandi della lista -->
+        <!-- in advanced view the band chips give way to the list controls -->
         <button id="addBand" class="btn dark adv-only" data-i18n="addBand"></button>
         <button id="resetAll" class="btn dark adv-only" data-i18n="resetGains"></button>
         <span class="spacer"></span>
@@ -145,6 +145,11 @@
   <div id="importDlg" class="dialog" hidden>
     <div class="dialog-box">
       <div class="dialog-title" data-i18n="importTitle"></div>
+      <ol class="dialog-steps">
+        <li data-i18n-html="importStep1"></li>
+        <li data-i18n-html="importStep2"></li>
+        <li data-i18n-html="importStep3"></li>
+      </ol>
       <p class="dialog-hint" data-i18n="importHint"></p>
       <textarea id="importText" spellcheck="false" placeholder="Preamp: -6.2 dB&#10;Filter 1: ON LSC Fc 105 Hz Gain 5.5 dB Q 0.70&#10;Filter 2: ON PK Fc 210 Hz Gain -2.9 dB Q 0.53&#10;…"></textarea>
       <div class="dialog-actions">

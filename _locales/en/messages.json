@@ -281,6 +281,21 @@
   "siteOff": {
     "message": "$1 forgotten"
   },
+  "importGroup": {
+    "message": "Headphones"
+  },
+  "importMenu": {
+    "message": "Import headphone profile (AutoEQ)…"
+  },
+  "importStep1": {
+    "message": "Open <a href=\"https://autoeq.app\" target=\"_blank\" rel=\"noopener\">autoeq.app</a> and choose your headphones"
+  },
+  "importStep2": {
+    "message": "In <b>Select app</b> choose <b>EqualizerAPO ParametricEq</b>"
+  },
+  "importStep3": {
+    "message": "Click <b>Download</b>, then open the file here with <b>Open file…</b>"
+  },
   "importApo": {
     "message": "Import AutoEQ / Equalizer APO…"
   },
@@ -288,10 +303,10 @@
     "message": "Copy as Equalizer APO"
   },
   "importTitle": {
-    "message": "Import a parametric EQ"
+    "message": "Import a headphone profile (AutoEQ / Equalizer APO)"
   },
   "importHint": {
-    "message": "Paste the contents of a ParametricEQ.txt file (AutoEQ, Equalizer APO) or open the file."
+    "message": "You can also paste the text of any Equalizer APO parametric file (up to 10 filters)."
   },
   "openFile": {
     "message": "Open file…"

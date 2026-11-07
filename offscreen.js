@@ -1,11 +1,11 @@
-// Motore audio: gira nel documento offscreen (invisibile).
-// Catena per ogni scheda: sorgente → preamp → filtri → limitatore → uscita.
+// Audio engine: runs in the (invisible) offscreen document.
+// Chain for each tab: source → preamp → filters → limiter → output.
 
-// Analizzatori: "pre" legge la sorgente, "post" l'uscita finale.
-// FFT e smoothing arrivano dal popup a ogni richiesta di spettro.
+// Analyzers: "pre" reads the source, "post" the final output.
+// FFT and smoothing come from the popup with each spectrum request.
 
 const ctx = new AudioContext({ latencyHint: "interactive" });
-const chains = new Map(); // tabId → catena audio con la sua configurazione (chain.eq)
+const chains = new Map(); // tabId → audio chain with its configuration (chain.eq)
 
 const FLOOR_DB = -160;
 
@@ -21,9 +21,9 @@ function configure(an, fft, smoothing) {
   if (an.smoothingTimeConstant !== smoothing) an.smoothingTimeConstant = smoothing;
 }
 
-// Mappa punto del grafico → bin della FFT. Ogni punto copre una colonna del grafico:
-// se contiene più bin si prende il massimo, se cade tra due bin (FFT poco risoluta
-// rispetto ai pixel, tipicamente sui bassi) si interpola.
+// Maps graph point → FFT bin. Each point covers one column of the graph:
+// if it contains several bins the maximum is taken; if it falls between two bins (FFT
+// resolution coarser than the pixels, typically in the low end) it is interpolated.
 const specMaps = new Map();
 function getSpecMap(fft, scale, n) {
   const key = `${fft}|${scale}|${n}`;
@@ -66,7 +66,7 @@ const dbToGain = (db) => Math.pow(10, db / 20);
 
 function setParam(param, value, immediate) {
   if (immediate) param.value = value;
-  else param.setTargetAtTime(value, ctx.currentTime, 0.012); // transizione morbida, niente click
+  else param.setTargetAtTime(value, ctx.currentTime, 0.012); // smooth transition, no clicks
 }
 
 function makeLimiter() {
@@ -79,11 +79,11 @@ function makeLimiter() {
   return c;
 }
 
-// Meter di uscita: separa i canali L/R e ne legge la forma d'onda per picco e RMS.
+// Output meter: splits the L/R channels and reads their waveform for peak and RMS.
 function makeMeter() {
   const split = ctx.createChannelSplitter(2);
   const meterL = ctx.createAnalyser(), meterR = ctx.createAnalyser();
-  meterL.fftSize = meterR.fftSize = 2048; // ~43 ms a 48 kHz
+  meterL.fftSize = meterR.fftSize = 2048; // ~43 ms at 48 kHz
   split.connect(meterL, 0);
   split.connect(meterR, 1);
   return { split, meterL, meterR };
@@ -103,10 +103,10 @@ function readLevel(an) {
   return { peak: db(peak), rms: db(Math.sqrt(sum / meterBuf.length)) };
 }
 
-// ---------- A/B a volume pareggiato ----------
-// Mentre l'EQ è attivo si stima di continuo la differenza di volume (RMS mediato ~1 s)
-// tra uscita e sorgente. Quando si ascolta B (bypass) la sorgente viene compensata di
-// quella differenza: il confronto riguarda il suono, non il volume.
+// ---------- Level-matched A/B ----------
+// While the EQ is active, the loudness difference (RMS averaged over ~1 s) between
+// output and source is continuously estimated. When listening to B (bypass) the source is
+// compensated by that difference: the comparison is about the sound, not the volume.
 
 const MATCH_LIMIT_DB = 12;
 const powBufs = new Map();
@@ -125,18 +125,18 @@ function matchDb(chain) {
 }
 setInterval(() => {
   for (const chain of chains.values()) {
-    if (chain.eq.bypass) continue;          // durante il bypass la stima resta congelata
+    if (chain.eq.bypass) continue;          // during bypass the estimate stays frozen
     const pre = meanSquare(chain.preAn), post = meanSquare(chain.postAn);
-    if (pre < 1e-6) continue;               // sotto -60 dBFS: silenzio, non aggiornare
+    if (pre < 1e-6) continue;               // below -60 dBFS: silence, don't update
     chain.preE = chain.preE ? chain.preE * 0.9 + pre * 0.1 : pre;
     chain.postE = chain.postE ? chain.postE * 0.9 + post * 0.1 : post;
   }
 }, 100);
 
-// ---------- catena audio di una scheda ----------
-// sorgente → preamp → filtri → limitatore → uscita (+ analizzatore post e meter)
-// in bypass: sorgente → guadagno di compensazione → uscita
-// Ogni scheda ha la sua configurazione (chain.eq).
+// ---------- audio chain of a tab ----------
+// source → preamp → filters → limiter → output (+ post analyzer and meter)
+// in bypass: source → compensation gain → output
+// Each tab has its own configuration (chain.eq).
 
 function apply(chain, immediate = false) {
   const eq = chain.eq;
@@ -167,7 +167,7 @@ function apply(chain, immediate = false) {
   }
 
   if (eq.bypass) {
-    // se l'EQ suona d dB più forte, B viene alzato di d dB
+    // if the EQ sounds d dB louder, B is raised by d dB
     setParam(chain.byp.gain, chain.match ? dbToGain(matchDb(chain)) : 1, immediate);
     return;
   }
@@ -205,7 +205,7 @@ async function start(tabId, streamId, eq, match) {
   };
   chains.set(tabId, chain);
   apply(chain, true);
-  // la traccia termina quando la scheda viene chiusa
+  // the track ends when the tab is closed
   stream.getAudioTracks()[0]?.addEventListener("ended", () => stop(tabId, true));
   return { ok: true };
 }
@@ -250,7 +250,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
           pre: msg.pre ? readSpectrum(chain.preAn, map) : null,
           post: msg.post ? readSpectrum(chain.postAn, map) : null,
           meter: msg.meter ? { l: readLevel(chain.meterL), r: readLevel(chain.meterR) } : null,
-          // compensazione applicata a B (null se non in bypass o se disattivata)
+          // compensation applied to B (null if not in bypass or if disabled)
           matchDb: chain.eq.bypass && chain.match ? Math.round(matchDb(chain) * 10) / 10 : null,
           sampleRate: ctx.sampleRate
         };

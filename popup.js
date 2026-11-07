@@ -1,25 +1,25 @@
-// Interfaccia di Bandwise EQ.
-// Stato:
-//   chrome.storage.session "tab:<id>" → { eq, activePreset, host }: configurazione di quella scheda
+// Bandwise EQ user interface.
+// State:
+//   chrome.storage.session "tab:<id>" → { eq, activePreset, host }: configuration of that tab
 //   chrome.storage.local:
-//     eq, activePreset → ultima configurazione usata (punto di partenza per le schede nuove)
-//     sites            → { host: { eq, activePreset } } siti con la memoria attiva (📌)
-//     presets          → { nome: configurazione } preset dell'utente
-//     view, analyzer, ui, prefs → preferenze di visualizzazione e ascolto
-// eq.bypass = bypass bloccato con Shift+A/B. eq.mode = "graphic" | "parametric".
+//     eq, activePreset → last configuration used (starting point for new tabs)
+//     sites            → { host: { eq, activePreset } } sites with per-site memory enabled (📌)
+//     presets          → { name: configuration } user presets
+//     view, analyzer, ui, prefs → display and listening preferences
+// eq.bypass = bypass locked with Shift+A/B. eq.mode = "graphic" | "parametric".
 
 const $ = (id) => document.getElementById(id);
-localize(); // testi dell'HTML nella lingua del browser, prima di tutto il resto
-// colori delle bande, pensati per il display scuro
+localize(); // HTML texts in the browser's language, before everything else
+// band colors, designed for the dark display
 const BAND_COLORS = ["#ff9f43", "#ff5fa2", "#3ddc84", "#b388ff", "#4dabf7",
                      "#ff6b6b", "#22d3ee", "#ffd43b", "#ced4da", "#a3e635"];
 const bandColor = (i) => BAND_COLORS[i % BAND_COLORS.length];
-// Modalità grafica: uno spettro dal rosso (bassi) al viola (alti), un colore per cursore.
-// OKLCH a luminosità costante: rosso, giallo e viola appaiono ugualmente luminosi
-// (in HSL rosso e blu sembrano molto più scuri del giallo).
+// Graphic mode: a spectrum from red (lows) to violet (highs), one color per slider.
+// OKLCH at constant lightness: red, yellow and violet appear equally bright
+// (in HSL red and blue look much darker than yellow).
 const GRAPHIC_COLORS = GRAPHIC_FREQS.map((_, i) => `oklch(0.76 0.15 ${Math.round(25 + i * 32)})`);
 const TYPE_LABELS = Object.fromEntries(EQ_TYPES.map((k) => [k, t("type_" + k)]));
-// palette del display (sempre scuro)
+// display palette (always dark)
 const D = {
   grid: "rgba(255,255,255,0.055)", major: "rgba(255,255,255,0.15)", zero: "rgba(255,255,255,0.32)",
   text: "#8a919b", fg: "#e6e8eb", label: "rgba(17,19,23,0.92)",
@@ -31,16 +31,16 @@ let eq = eqDefault();
 let userPresets = {};
 let activePreset = "";
 let tabId = null;
-let tabHost = "";       // sito della scheda (vuoto per pagine interne)
+let tabHost = "";       // site of the tab (empty for internal pages)
 let sites = {};
 let prefs = { matchAB: true };
 let capturing = false;
-let selIdx = 0;         // banda selezionata (parametrico)
-let abHold = false;     // A/B tenuto premuto (bypass momentaneo)
+let selIdx = 0;         // selected band (parametric)
+let abHold = false;     // A/B held down (momentary bypass)
 let advanced = false;
-let matchNow = null;    // compensazione applicata a B, in dB (dal motore)
+let matchNow = null;    // compensation applied to B, in dB (from the engine)
 
-// analizzatore
+// analyzer
 let view = { pre: true, post: true, peak: false };
 let paused = false;
 let spec = null;
@@ -52,7 +52,7 @@ let sampleRate = 0;
 
 const isGraphic = () => eq.mode === "graphic";
 
-// ---------- formati dei valori ----------
+// ---------- value formats ----------
 
 const fmtF = (f) => (f >= 1000 ? (f / 1000).toFixed(f % 1000 ? 1 : 0) + "k" : String(Math.round(f)));
 const fmtGain = (v) => ({ text: (v > 0 ? "+" : "") + v.toFixed(1), unit: "dB" });
@@ -60,7 +60,7 @@ const fmtFreq = (v) => (v >= 1000
   ? { text: (v / 1000).toFixed(v >= 10000 ? 1 : 2), unit: "kHz" }
   : { text: String(Math.round(v)), unit: "Hz" });
 const parseNum = (s) => parseFloat(String(s).trim().replace(",", "."));
-// accetta "250", "2.5k", "2,5 kHz"; se il campo mostra kHz, "3" vuol dire 3 kHz
+// accepts "250", "2.5k", "2,5 kHz"; if the field shows kHz, "3" means 3 kHz
 function parseFreq(s, ctrl) {
   s = String(s).trim().toLowerCase();
   let n = parseNum(s);
@@ -70,7 +70,7 @@ function parseFreq(s, ctrl) {
   return n;
 }
 
-// ---------- messaggi e salvataggio ----------
+// ---------- messages and saving ----------
 
 const send = (msg) => chrome.runtime.sendMessage(msg);
 
@@ -83,7 +83,7 @@ function flushSave() {
   clearTimeout(saveTimer);
   const state = { eq, activePreset };
   const local = { ...state };
-  if (tabHost && sites[tabHost]) { sites[tabHost] = state; local.sites = sites; } // 📌 attiva: aggiorna il sito
+  if (tabHost && sites[tabHost]) { sites[tabHost] = state; local.sites = sites; } // 📌 enabled: update the site
   chrome.storage.local.set(local);
   if (tabId != null) chrome.storage.session.set({ ["tab:" + tabId]: { ...state, host: tabHost } });
 }
@@ -92,8 +92,8 @@ addEventListener("pagehide", flushSave);
 const isBypassed = () => eq.bypass || abHold;
 const effectiveEq = () => (abHold ? { ...eq, bypass: true } : eq);
 
-// Invio al motore audio, al massimo ~60 volte al secondo. Timer e non requestAnimationFrame:
-// se Chrome sospende i frame, l'invio non deve restare bloccato.
+// Send to the audio engine, at most ~60 times per second. A timer rather than requestAnimationFrame:
+// if Chrome suspends frames, sending must not get stuck.
 let livePending = false;
 function sendLive() {
   if (livePending || tabId == null) return;
@@ -104,7 +104,7 @@ function sendLive() {
   }, 16);
 }
 
-// Da chiamare dopo ogni modifica fatta dall'utente.
+// Call after every change made by the user.
 function changed({ structure = false, keepPreset = false } = {}) {
   if (!keepPreset && activePreset) {
     activePreset = "";
@@ -122,11 +122,11 @@ function changed({ structure = false, keepPreset = false } = {}) {
   save();
 }
 
-// ---------- stato e accensione ----------
+// ---------- state and power ----------
 
-// Messaggio sovrapposto. kind: "info" | "warn" | "error".
-// Resta visibile il tempo di leggerlo (~70 ms per carattere; minimo 2,5 s, 6 s per avvisi ed errori),
-// non scompare finché il mouse ci sta sopra e si chiude con un clic.
+// Overlay message. kind: "info" | "warn" | "error".
+// Stays visible long enough to read it (~70 ms per character; minimum 2.5 s, 6 s for warnings and errors),
+// doesn't disappear while the mouse is over it, and closes with a click.
 let statusTimer = 0, statusMs = 0;
 function setStatus(text, kind = "info") {
   const el = $("status");
@@ -186,7 +186,7 @@ function friendlyError(err = "") {
   return err || t("errUnknown");
 }
 
-// ---------- preset ----------
+// ---------- presets ----------
 
 const builtinName = (id) => t("preset_" + id.replace(/^g_/, ""));
 
@@ -207,19 +207,31 @@ function renderPresets() {
     for (const [text, value] of items) og.append(new Option(text, value));
     sel.append(og);
   }
+  // import of a headphone profile: at the bottom of the menu, where someone wanting to load a preset looks for it
+  const og = document.createElement("optgroup");
+  og.label = t("importGroup");
+  og.append(new Option(t("importMenu"), IMPORT_OPTION));
+  sel.append(og);
   sel.value = activePreset;
   if (sel.value !== activePreset) sel.value = "";
-  // rinomina ed elimina (nel popover del 💾) valgono solo per i preset dell'utente
+  // rename and delete (in the 💾 popover) apply only to user presets
   $("presetManage").hidden = !activePreset.startsWith("u:");
 }
 
+const IMPORT_OPTION = "__import";
 $("preset").addEventListener("change", (e) => {
   const v = e.target.value;
+  if (v === IMPORT_OPTION) { // not a preset: go back to the current selection and open the import
+    e.target.value = activePreset;
+    if (e.target.value !== activePreset) e.target.value = "";
+    openImport();
+    return;
+  }
   if (!v) return;
   const name = v.slice(2);
   const src = v.startsWith("b:") ? EQ_BUILTIN_PRESETS[name] : userPresets[name];
   if (!src) return;
-  const locked = eq.bypass;           // il bypass bloccato non dipende dal preset
+  const locked = eq.bypass;           // the locked bypass doesn't depend on the preset
   eq = eqSanitize(structuredClone(src));
   eq.bypass = locked;
   activePreset = v;
@@ -228,7 +240,7 @@ $("preset").addEventListener("change", (e) => {
   changed({ structure: true, keepPreset: true });
 });
 
-// Popover del 💾: nome + Salva; per i preset dell'utente anche Rinomina ed Elimina; import/export APO.
+// 💾 popover: name + Save; for user presets also Rename and Delete; APO import/export.
 let suggestedName = "";
 function openPresetPop() {
   $("presetName").value = activePreset.startsWith("u:") ? activePreset.slice(2) : suggestedName;
@@ -258,7 +270,7 @@ async function presetAction(rename) {
     setStatus(t("presetRenamed", name));
   } else {
     const copy = structuredClone(eq);
-    copy.bypass = false;              // un preset non salva lo stato del bypass
+    copy.bypass = false;              // a preset doesn't save the bypass state
     userPresets[name] = copy;
     setStatus(t("presetSaved", name));
   }
@@ -325,7 +337,7 @@ $("exportApo").addEventListener("click", async () => {
   }
 });
 
-// ---------- memoria per sito (📌) ----------
+// ---------- per-site memory (📌) ----------
 
 function syncPin() {
   const b = $("sitePin");
@@ -347,7 +359,7 @@ $("sitePin").addEventListener("click", async () => {
   syncPin();
 });
 
-// ---------- preamp: fader + campo + meter ----------
+// ---------- preamp: fader + field + meter ----------
 
 const fader = new Fader($("fader"), {
   min: -12, max: 12, def: 0, ticks: [12, 6, 0, -6, -12],
@@ -374,7 +386,7 @@ $("resetAll").addEventListener("click", () => {
 });
 
 // ---------- A/B ----------
-// Tieni premuto = ascolto senza EQ. Shift+clic = blocca/sblocca il bypass. Clic con bypass bloccato = sblocca.
+// Hold = listen without EQ. Shift+click = lock/unlock the bypass. Click with bypass locked = unlock.
 
 function syncAB() {
   const b = $("ab");
@@ -403,20 +415,20 @@ $("ab").addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") { e.preventDefault(); eq.bypass = !eq.bypass; changed({ keepPreset: true }); }
 });
 
-// ---------- modalità: grafica / parametrica, vista avanzata ----------
+// ---------- mode: graphic / parametric, advanced view ----------
 
 function syncMode() {
   const graphic = isGraphic();
-  const adv = advanced && !graphic; // la vista avanzata riguarda solo il parametrico
+  const adv = advanced && !graphic; // the advanced view applies only to parametric
   document.body.classList.toggle("graphic", graphic);
   const wasAdv = document.body.classList.contains("adv");
   document.body.classList.toggle("adv", adv);
   $("advanced").hidden = !adv;
-  $("bandEdit").hidden = adv; // la lista contiene già tutte le bande
+  $("bandEdit").hidden = adv; // the list already contains all the bands
   $("modeBtn").setAttribute("aria-expanded", String(adv));
   $("modeGraphic").setAttribute("aria-pressed", String(graphic));
   $("modeParam").setAttribute("aria-pressed", String(!graphic));
-  if (adv) fitList(); // le righe si possono misurare solo quando la lista è visibile
+  if (adv) fitList(); // rows can be measured only when the list is visible
   if (adv !== wasAdv || W !== canvas.clientWidth || H !== canvas.clientHeight) resize();
 }
 $("modeBtn").addEventListener("click", () => {
@@ -425,8 +437,8 @@ $("modeBtn").addEventListener("click", () => {
   draw();
   chrome.storage.local.set({ ui: { advanced } });
 });
-// Un solo equalizzatore, due modi di modificarlo: passando da una modalità all'altra la curva
-// viene trasferita (vedi eqSwitchMode). Dal parametrico al grafico può essere approssimata: si avvisa.
+// A single equalizer, two ways to edit it: when switching from one mode to the other the curve
+// is transferred (see eqSwitchMode). From parametric to graphic it may be approximated: the user is warned.
 function switchMode(mode) {
   if (eq.mode === mode) return;
   const r = eqSwitchMode(eq, mode);
@@ -438,7 +450,7 @@ function switchMode(mode) {
 $("modeGraphic").addEventListener("click", () => switchMode("graphic"));
 $("modeParam").addEventListener("click", () => switchMode("parametric"));
 
-// Toccare i cursori rende la curva "del grafico": le bande parametriche originali non valgono più.
+// Touching the sliders makes the curve "graphic": the original parametric bands no longer apply.
 function graphicEdited() { delete eq.paramBackup; }
 $("resetGraphic").addEventListener("click", () => {
   eq.graphic = eq.graphic.map(() => 0);
@@ -446,7 +458,7 @@ $("resetGraphic").addEventListener("click", () => {
   changed();
 });
 
-// ---------- modalità grafica: 10 cursori ----------
+// ---------- graphic mode: 10 sliders ----------
 
 const gcols = GRAPHIC_FREQS.map((f, i) => {
   const col = document.createElement("div");
@@ -461,7 +473,7 @@ const gcols = GRAPHIC_FREQS.map((f, i) => {
   $("gbank").append(col);
   col.style.setProperty("--c", GRAPHIC_COLORS[i]);
   const fd = new Fader(host, {
-    min: -GRAPHIC_MAX, max: GRAPHIC_MAX, def: 0, compact: true, fill: true, marks: { step: 3, major: 6 },
+    min: -GRAPHIC_MAX, max: GRAPHIC_MAX, def: 0, compact: true, fill: true, marks: { step: 3 },
     onChange: (v) => { eq.graphic[i] = v; graphicEdited(); changed(); }
   });
   host.title = `${fmtF(f)} Hz`;
@@ -476,11 +488,11 @@ function syncGraphic() {
   });
 }
 
-// ---------- parametrico: bande ----------
+// ---------- parametric: bands ----------
 
 function addBand() {
   if (eq.bands.length >= EQ_MAX_BANDS) return;
-  // nuova banda nel punto più "vuoto" dello spettro
+  // new band at the "emptiest" point of the spectrum
   const used = eq.bands.map((b) => Math.log10(b.freq)).sort((a, b) => a - b);
   const pts = [Math.log10(FREQ_MIN), ...used, Math.log10(FREQ_MAX)];
   let best = 0;
@@ -504,7 +516,7 @@ function editBand(i, key, value) {
   if (key === "type") {
     const wasQDb = EQ_Q_DB_TYPES.includes(b.type);
     b.type = value;
-    if (wasQDb !== EQ_Q_DB_TYPES.includes(b.type)) b.q = wasQDb ? 1 : 0; // unità di Q diversa
+    if (wasQDb !== EQ_Q_DB_TYPES.includes(b.type)) b.q = wasQDb ? 1 : 0; // different Q unit
   } else b[key] = value;
   eq = eqSanitize(eq);
   changed();
@@ -517,15 +529,15 @@ function select(i) {
   draw();
 }
 
-// Forma della risposta di ciascun tipo di filtro (24×24, solo tratto).
+// Response shape of each filter type (24×24, stroke only).
 const TYPE_ICONS = {
-  peaking:   "M2 15h4c3 0 4-9 6-9s3 9 6 9h4",          // spalle piatte, gobba verso l'alto
+  peaking:   "M2 15h4c3 0 4-9 6-9s3 9 6 9h4",          // flat shoulders, bump upward
   lowshelf:  "M2 7h5c4 0 5 10 9 10h6",
   highshelf: "M2 17h6c4 0 5-10 9-10h5",
   lowpass:   "M2 7h9c4 0 6 4 9 13",
   highpass:  "M4 20c3-9 5-13 9-13h9",
-  notch:     "M2 7h7.5L12 19l2.5-12H22",                // piatto in alto, "V" stretta verso il basso
-  bandpass:  "M2 20h3c3 0 5-14 7-14s4 14 7 14h3"        // parte e finisce in basso
+  notch:     "M2 7h7.5L12 19l2.5-12H22",                // flat on top, narrow "V" downward
+  bandpass:  "M2 20h3c3 0 5-14 7-14s4 14 7 14h3"        // starts and ends low
 }
 const typeIcon = (k) =>
   `<svg viewBox="0 0 24 24"><path d="${TYPE_ICONS[k]}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -533,7 +545,7 @@ const typeIcon = (k) =>
 const ICON_POWER = '<svg viewBox="0 0 24 24"><path d="M12 3v8M6.4 6.9a8 8 0 1 0 11.2 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 const ICON_TRASH = '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-// Riga di controlli di una banda: tipo, frequenza, guadagno, Q, accensione, cestino.
+// Control row of a band: type, frequency, gain, Q, on/off, trash.
 class BandControls {
   constructor(index, { numbered = false } = {}) {
     this.i = index;
@@ -544,7 +556,7 @@ class BandControls {
       this.num.className = "num-chip";
       row.append(this.num);
     }
-    // tipo di filtro: un pulsante per tipo, con l'icona della forma e una spiegazione nel suggerimento
+    // filter type: one button per type, with the shape icon and an explanation in the tooltip
     const wrap = document.createElement("div");
     wrap.className = "type-seg";
     wrap.setAttribute("role", "group");
@@ -619,14 +631,14 @@ class BandControls {
   }
 }
 
-// barra sotto il grafico: bollini + editor della banda selezionata
+// bar below the graph: chips + editor of the selected band
 const editor = new BandControls(0);
 $("bandEdit").append(editor.el);
 
 function renderChips() {
   const box = $("chips");
   box.replaceChildren();
-  box.classList.toggle("many", eq.bands.length >= 8); // bollini un po' più piccoli: la riga resta una sola
+  box.classList.toggle("many", eq.bands.length >= 8); // slightly smaller chips: the row stays on a single line
   eq.bands.forEach((_, i) => {
     const c = document.createElement("button");
     c.className = "band-chip";
@@ -643,7 +655,7 @@ function renderChips() {
   box.append(add);
 }
 
-// lista completa (vista avanzata)
+// full list (advanced view)
 let listControls = [];
 function renderBandList() {
   listControls = eq.bands.map((_, i) => new BandControls(i, { numbered: true }));
@@ -651,7 +663,7 @@ function renderBandList() {
   fitList();
 }
 
-// La lista mostra al massimo 5 righe (misurate davvero), oltre scorre.
+// The list shows at most 5 rows (actually measured), beyond that it scrolls.
 const LIST_ROWS = 5;
 function fitList() {
   const row = $("bandList").querySelector(".band-row");
@@ -673,7 +685,7 @@ function syncBands() {
   for (const c of listControls) c.update();
 }
 
-// ---------- grafico ----------
+// ---------- graph ----------
 
 const canvas = $("graph");
 const g = canvas.getContext("2d");
@@ -681,7 +693,7 @@ const PAD = 14;
 let W = 0, H = 0;
 const offline = new OfflineAudioContext(1, 128, 48000);
 
-// La curva dell'EQ e lo spettro usano punti equidistanti in orizzontale.
+// The EQ curve and the spectrum use horizontally equidistant points.
 const N_POINTS = 300;
 let curveFreqs = new Float32Array(N_POINTS);
 const mag = new Float32Array(N_POINTS), phase = new Float32Array(N_POINTS);
@@ -701,7 +713,7 @@ function resize() {
   W = canvas.clientWidth; H = canvas.clientHeight;
   canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
   g.setTransform(dpr, 0, 0, dpr, 0, 0);
-  specN = Math.max(64, Math.min(2048, Math.round(W))); // un punto per pixel
+  specN = Math.max(64, Math.min(2048, Math.round(W))); // one point per pixel
   meter.resize();
 }
 
@@ -712,12 +724,12 @@ function bandResponseDb(b, out) {
   for (let i = 0; i < N_POINTS; i++) out[i] += 20 * Math.log10(Math.max(mag[i], 1e-6));
 }
 
-// Punti trascinabili del grafico per la modalità attiva.
-//   grafico: 10 punti fissi in frequenza, si muovono solo in verticale
-//   parametrico: un punto per banda, colorato
+// Draggable points of the graph for the active mode.
+//   graphic: 10 points fixed in frequency, move only vertically
+//   parametric: one point per band, colored
 function graphPoints() {
   return isGraphic()
-    // nel grafico i punti stanno sulla curva: valore del cursore + preamp (salvo in bypass, dove la curva è piatta)
+    // in graphic mode the points sit on the curve: slider value + preamp (except in bypass, where the curve is flat)
     ? GRAPHIC_FREQS.map((f, i) => ({ freq: f, gain: eq.graphic[i], offset: isBypassed() ? 0 : eq.preamp, hasGain: true, on: true, color: GRAPHIC_COLORS[i], label: "" }))
     : eq.bands.map((b, i) => ({ freq: b.freq, gain: b.gain, hasGain: EQ_GAIN_TYPES.includes(b.type), on: b.on,
         color: bandColor(i), label: String(i + 1), q: b.q, hasQ: EQ_Q_TYPES.includes(b.type) }));
@@ -737,7 +749,7 @@ function label(text, x, y) {
   g.fillText(text, lx + 5, y + 13);
 }
 
-let focusIdx = -1; // banda il cui campo ha il focus (evidenziata nel grafico)
+let focusIdx = -1; // band whose field has focus (highlighted in the graph)
 document.addEventListener("focusin", (e) => {
   const row = e.target.closest?.(".band-row");
   focusIdx = row ? (row === editor.el ? editor.i : listControls.findIndex((c) => c.el === row)) : -1;
@@ -751,7 +763,7 @@ function draw() {
   g.font = "10px system-ui, sans-serif";
   g.lineWidth = 1;
 
-  // griglia delle frequenze
+  // frequency grid
   g.fillStyle = D.text;
   const vline = (f, color) => {
     const x = Math.round(xOf(f)) + 0.5;
@@ -762,7 +774,7 @@ function draw() {
   if (an.scale === "linear") {
     for (let f = 2000; f < FREQ_MAX; f += 2000) g.fillText(fmtF(f), vline(f, D.grid) + 3, H - 4);
   } else {
-    // griglia logaritmica classica: 1…9 per decade, decadi marcate, etichette su 1-2-5
+    // classic logarithmic grid: 1…9 per decade, decades marked, labels on 1-2-5
     for (let decade = 10; decade <= 10000; decade *= 10) {
       for (let m = 1; m <= 9; m++) {
         const f = m * decade;
@@ -784,7 +796,7 @@ function draw() {
 
   drawSpectrum();
 
-  // curve: complessiva sempre; quelle dei singoli filtri solo nel parametrico
+  // curves: the overall one always; those of individual filters only in parametric
   const bypassed = isBypassed();
   const graphic = isGraphic();
   const total = new Float32Array(N_POINTS).fill(bypassed ? 0 : eq.preamp);
@@ -808,7 +820,7 @@ function draw() {
     const color = bandColor(i);
     const selected = i === sel;
     if (selected) {
-      // area tra la curva del filtro e lo 0 dB: rende evidente la larghezza (Q)
+      // area between the filter curve and 0 dB: makes the width (Q) evident
       trace(resp);
       g.lineTo(W, y0); g.lineTo(0, y0); g.closePath();
       g.fillStyle = color; g.globalAlpha = bypassed ? 0.06 : 0.15; g.fill();
@@ -829,11 +841,11 @@ function draw() {
   }
   g.strokeStyle = D.curve; g.lineWidth = 2;
   g.globalAlpha = bypassed ? 0.3 : 1;
-  if (!bypassed) { g.shadowColor = D.curveGlow; g.shadowBlur = 3; } // alone appena accennato
+  if (!bypassed) { g.shadowColor = D.curveGlow; g.shadowBlur = 3; } // barely hinted glow
   g.stroke();
   g.shadowBlur = 0; g.globalAlpha = 1;
 
-  // punti
+  // points
   graphPoints().forEach((pt, i) => {
     const x = xOf(pt.freq), y = pointY(pt);
     const big = i === dragIdx || i === hoverIdx || i === sel;
@@ -851,7 +863,7 @@ function draw() {
   g.globalAlpha = 1;
 
   if (bypassed) {
-    // targhetta in basso al centro (in alto c'è il mirino), con la compensazione di volume se attiva
+    // label at bottom center (the crosshair is at the top), with the volume compensation if active
     const m = matchNow != null && capturing ? (matchNow > 0 ? "+" : "") + matchNow.toFixed(1) : null;
     const text = m != null
       ? t(eq.bypass ? "bypassTagMatched" : "abTagMatched", m)
@@ -865,7 +877,7 @@ function draw() {
     g.textAlign = "start";
   }
 
-  // etichetta del punto attivo oppure mirino
+  // label of the active point or crosshair
   const li = dragIdx >= 0 ? dragIdx : hoverIdx;
   const pts = graphPoints();
   if (li >= 0 && pts[li]) {
@@ -882,7 +894,7 @@ function draw() {
   }
 }
 
-// ---------- analizzatore ----------
+// ---------- analyzer ----------
 
 let lastTotal = null;
 const specRange = () => DB_RANGES[an.dbRange];
@@ -970,7 +982,7 @@ function updatePeak(pre) {
   for (let i = 0; i < pre.length; i++) if (pre[i] > peak[i]) peak[i] = pre[i];
 }
 
-// A ogni frame chiede al motore audio spettro (se non in pausa), livelli e compensazione A/B.
+// On every frame asks the audio engine for the spectrum (if not paused), levels and A/B compensation.
 async function loop() {
   if (!capturing) { loopRunning = false; meter.reset(); draw(); return; }
   const wantPre = !paused && (view.pre || view.peak);
@@ -987,7 +999,7 @@ async function loop() {
       if (r.sampleRate && r.sampleRate !== sampleRate) { sampleRate = r.sampleRate; syncAnalyzerInfo(); }
       if (!paused && view.peak && validSpec(r.pre)) updatePeak(r.pre);
     }
-  } catch { /* motore non raggiungibile: si riprova al frame dopo */ }
+  } catch { /* engine unreachable: retry on the next frame */ }
   draw();
   requestAnimationFrame(loop);
 }
@@ -997,7 +1009,7 @@ function startLoop() {
   requestAnimationFrame(loop);
 }
 
-// legenda del display
+// display legend
 function syncView() {
   $("viewPre").setAttribute("aria-pressed", String(view.pre));
   $("viewPost").setAttribute("aria-pressed", String(view.post));
@@ -1017,7 +1029,7 @@ for (const [id, key] of [["viewPre", "pre"], ["viewPost", "post"], ["viewPeak", 
 $("resetPeak").addEventListener("click", () => { peak = null; draw(); });
 $("pause").addEventListener("click", () => { paused = !paused; syncView(); });
 
-// ---------- impostazioni (pannello dietro l'ingranaggio) ----------
+// ---------- settings (panel behind the gear) ----------
 
 $("matchAB").addEventListener("change", (e) => {
   prefs.matchAB = e.target.checked;
@@ -1081,7 +1093,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") { setPanel(false); closePresetPop(); closeImport(); }
 });
 
-// ---------- interazione col grafico ----------
+// ---------- graph interaction ----------
 
 let dragIdx = -1, hoverIdx = -1;
 
@@ -1096,8 +1108,8 @@ function hit(e) {
   return { i: best, mx, my };
 }
 
-// Trascinamento relativo: il punto si muove quanto il mouse (¼ con Shift premuto).
-// Nella modalità grafica i punti si muovono solo in verticale.
+// Relative dragging: the point moves as much as the mouse (¼ with Shift held).
+// In graphic mode the points move only vertically.
 let drag = null;
 
 canvas.addEventListener("pointerdown", (e) => {
@@ -1126,7 +1138,7 @@ canvas.addEventListener("pointermove", (e) => {
   drag.vy = Math.min(yOf(-lim + drag.offset), Math.max(yOf(lim + drag.offset), drag.vy + (my - drag.lastY) * k));
   drag.lastX = mx; drag.lastY = my;
   if (isGraphic()) {
-    eq.graphic[dragIdx] = Math.round((dbOf(drag.vy) - drag.offset) * 10) / 10; // solo in verticale
+    eq.graphic[dragIdx] = Math.round((dbOf(drag.vy) - drag.offset) * 10) / 10; // vertical only
     graphicEdited();
   } else {
     const b = eq.bands[dragIdx];
@@ -1148,13 +1160,13 @@ canvas.addEventListener("pointerleave", () => {
 });
 
 canvas.addEventListener("wheel", (e) => {
-  if (e.ctrlKey || isGraphic()) return; // pinch-zoom; nel grafico la Q è fissa
+  if (e.ctrlKey || isGraphic()) return; // pinch-zoom; in graphic mode Q is fixed
   const { i } = hit(e);
   if (i < 0) return;
   e.preventDefault();
   const b = eq.bands[i];
   if (!EQ_Q_TYPES.includes(b.type)) return;
-  const steps = wheelSteps(e); // proporzionale: niente salti con trackpad e inerzia
+  const steps = wheelSteps(e); // proportional: no jumps with trackpad and inertia
   if (!steps) return;
   if (EQ_Q_DB_TYPES.includes(b.type)) b.q += steps * (e.shiftKey ? 0.1 : 0.5);
   else b.q *= Math.pow(e.shiftKey ? 1.025 : 1.12, steps);
@@ -1172,7 +1184,7 @@ canvas.addEventListener("dblclick", (e) => {
   changed();
 });
 
-// ---------- avvio ----------
+// ---------- startup ----------
 
 function hostOf(url) {
   try {
@@ -1184,7 +1196,7 @@ function hostOf(url) {
 (async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   tabId = tab?.id ?? null;
-  tabHost = hostOf(tab?.url || ""); // l'URL è leggibile grazie ad activeTab
+  tabHost = hostOf(tab?.url || ""); // the URL is readable thanks to activeTab
 
   const stored = await chrome.storage.local.get({
     eq: null, presets: {}, activePreset: "", view: null, analyzer: null, ui: null, sites: {}, prefs: null
@@ -1194,10 +1206,10 @@ function hostOf(url) {
   prefs = { matchAB: stored.prefs?.matchAB !== false };
   userPresets = stored.presets && typeof stored.presets === "object" ? stored.presets : {};
 
-  // Configurazione di questa scheda, in ordine di priorità:
-  // 1. quella della scheda (se è ancora sullo stesso sito, o il sito non ha memoria)
-  // 2. la memoria del sito (📌)
-  // 3. l'ultima configurazione usata
+  // Configuration of this tab, in order of priority:
+  // 1. the tab's own (if it's still on the same site, or the site has no memory)
+  // 2. the site's memory (📌)
+  // 3. the last configuration used
   const site = tabHost ? sites[tabHost] : null;
   const src = session && (session.host === tabHost || !site) ? session
     : site ? site
@@ -1210,11 +1222,7 @@ function hostOf(url) {
   }
   an = analyzerSanitize(stored.analyzer);
   advanced = stored.ui?.advanced === true;
-  const LEGACY = { "Piatto": "flat", "Bassi +": "bass", "Voce / dialoghi": "voice", "Alti +": "treble", "Loudness": "loudness" };
-  if (activePreset.startsWith("b:") && !(activePreset.slice(2) in EQ_BUILTIN_PRESETS)) {
-    const id = LEGACY[activePreset.slice(2)];
-    activePreset = id ? "b:" + id : "";
-  }
+  if (activePreset.startsWith("b:") && !(activePreset.slice(2) in EQ_BUILTIN_PRESETS)) activePreset = "";
 
   updateAxes();
   syncMode();
@@ -1231,13 +1239,13 @@ function hostOf(url) {
   syncPin();
   meter.reset();
   draw();
-  flushSave(); // registra subito la configurazione di questa scheda
+  flushSave(); // immediately record this tab's configuration
 
   try {
     const { tabs = [] } = (await send({ target: "sw", cmd: "status" })) || {};
     capturing = tabs.includes(tabId);
     if (capturing) { sendLive(); startLoop(); }
     else if (tabs.length) setStatus(t("otherTabs", tabs.length));
-  } catch { /* service worker non ancora pronto */ }
+  } catch { /* service worker not ready yet */ }
   renderPower();
 })();

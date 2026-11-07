@@ -1,12 +1,12 @@
-// Traduzioni: testi in _locales/<lingua>/messages.json, lingua scelta da Chrome
-// (inglese se la lingua del browser non è disponibile).
+// Translations: strings in _locales/<language>/messages.json, language chosen by Chrome
+// (English if the browser language is not available).
 
 const t = (key, ...subs) => chrome.i18n.getMessage(key, subs.map(String)) || key;
 
-// Applica le traduzioni agli attributi data-i18n* dell'HTML.
-//   data-i18n="chiave"          → testo
-//   data-i18n-html="chiave"     → HTML (solo per i nostri testi con <b>)
-//   data-i18n-title / -placeholder / -aria → attributi
+// Applies translations to the HTML's data-i18n* attributes.
+//   data-i18n="key"             → text
+//   data-i18n-html="key"        → HTML (only for our own strings with <b>)
+//   data-i18n-title / -placeholder / -aria → attributes
 function localize(root = document) {
   for (const el of root.querySelectorAll("[data-i18n]")) el.textContent = t(el.dataset.i18n);
   for (const el of root.querySelectorAll("[data-i18n-html]")) el.innerHTML = t(el.dataset.i18nHtml);

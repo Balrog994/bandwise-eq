@@ -1,7 +1,7 @@
-"""Crea lo zip per il Chrome Web Store con i soli file dell'estensione.
+"""Builds the Chrome Web Store zip containing only the extension's files.
 
-Uso:  python scripts/build_zip.py [cartella di destinazione]   (default: dist/)
-Il nome del file contiene la versione letta da manifest.json.
+Usage:  python scripts/build_zip.py [destination folder]   (default: dist/)
+The file name contains the version read from manifest.json.
 """
 import json
 import os
@@ -9,7 +9,7 @@ import sys
 import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# file e cartelle del repository che non fanno parte dell'estensione
+# repository files and folders that are not part of the extension
 EXCLUDE_DIRS = {".git", ".github", "docs", "scripts", "dist"}
 EXCLUDE_FILES = {"README.md", "LICENSE", ".gitignore", ".gitattributes"}
 

@@ -1,19 +1,19 @@
-// Strutture dati e validazione condivise tra popup e motore audio.
+// Data structures and validation shared between the popup and the audio engine.
 
 const EQ_TYPES = ["peaking", "lowshelf", "highshelf", "lowpass", "highpass", "notch", "bandpass"];
-const EQ_GAIN_TYPES = ["peaking", "lowshelf", "highshelf"];    // tipi che usano il guadagno
-const EQ_Q_DB_TYPES = ["lowpass", "highpass"];                  // per questi Web Audio esprime Q in dB
-const EQ_Q_TYPES = ["peaking", "notch", "bandpass", "lowpass", "highpass"]; // gli shelf ignorano Q
+const EQ_GAIN_TYPES = ["peaking", "lowshelf", "highshelf"];    // types that use gain
+const EQ_Q_DB_TYPES = ["lowpass", "highpass"];                  // for these, Web Audio expresses Q in dB
+const EQ_Q_TYPES = ["peaking", "notch", "bandpass", "lowpass", "highpass"]; // shelves ignore Q
 const EQ_MAX_BANDS = 10;
-const EQ_MAX_GAIN = 40; // limite assoluto; quello effettivo è il "range guadagno filtri"
+const EQ_MAX_GAIN = 40; // absolute limit; the effective one is the "filter gain range"
 
-// Modalità grafica: 10 cursori a ottave (31 Hz … 16 kHz).
-// Filtri: 8 campane con Q 0,8 + shelf alle estremità (40 Hz e 11,3 kHz): a 16 kHz una
-// campana si deformerebbe (vicino al limite di Nyquist) creando una cuspide.
-// I filtri si sovrappongono, quindi i loro guadagni vengono calcolati (graphicFilterGains)
-// perché la curva passi esattamente per i valori dei cursori. Parametri scelti con una
-// ricerca su curve di prova: tra un cursore e l'altro la curva resta entro ~0,2 dB dal
-// segmento che li unisce (con Q 1,0 e shelf a 44 Hz si formava una "U" di ~0,4 dB).
+// Graphic mode: 10 octave-spaced sliders (31 Hz … 16 kHz).
+// Filters: 8 bells with Q 0.8 + shelves at the ends (40 Hz and 11.3 kHz): at 16 kHz a
+// bell would get distorted (close to the Nyquist limit), creating a cusp.
+// The filters overlap, so their gains are computed (graphicFilterGains)
+// so that the curve passes exactly through the slider values. Parameters chosen by
+// searching over test curves: between adjacent sliders the curve stays within ~0.2 dB of
+// the segment joining them (with Q 1.0 and the low shelf at 44 Hz the curve sagged by ~0.4 dB).
 const GRAPHIC_FREQS = [31, 62, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
 const GRAPHIC_Q = 0.8;
 const GRAPHIC_MAX = 12;
@@ -22,10 +22,10 @@ const GRAPHIC_FILTERS = GRAPHIC_FREQS.map((f, i) =>
   : i === GRAPHIC_FREQS.length - 1 ? { type: "highshelf", freq: 11314 }
   : { type: "peaking", freq: f });
 
-// ---- Asse delle frequenze e impostazioni dell'analizzatore (stessi valori di Just EQ) ----
+// ---- Frequency axis and analyzer settings (same values as Just EQ) ----
 const FREQ_MIN = 20, FREQ_MAX = 20000;
 
-// t ∈ [0,1] = posizione orizzontale sul grafico
+// t ∈ [0,1] = horizontal position on the graph
 const freqAt = (t, scale) => scale === "linear"
   ? FREQ_MIN + (FREQ_MAX - FREQ_MIN) * t
   : FREQ_MIN * Math.pow(FREQ_MAX / FREQ_MIN, t);
@@ -67,16 +67,16 @@ const flatBands = () => [
   eqBand("highshelf", 10000)
 ];
 
-// Stato completo: ogni modalità conserva le sue impostazioni.
+// Full state: each mode keeps its own settings.
 function eqState(mode, { preamp = 0, bands = flatBands(), graphic = GRAPHIC_FREQS.map(() => 0) } = {}) {
   return { mode, preamp, limiter: true, bypass: false, bands, graphic };
 }
 const eqFlat = () => eqState("parametric");
-// Configurazione per una nuova installazione: modalità grafica, piatta.
+// Configuration for a fresh install: graphic mode, flat.
 const eqDefault = () => eqState("graphic");
 
-// Normalizza qualsiasi oggetto (da storage, preset o messaggio) in uno stato valido.
-// Gli stati salvati prima della modalità grafica non hanno "mode": restano parametrici.
+// Normalizes any object (from storage, preset or message) into a valid state.
+// States saved before graphic mode existed have no "mode": they stay parametric.
 function sanitizeBands(list) {
   return list.slice(0, EQ_MAX_BANDS).map((b) => {
     const type = EQ_TYPES.includes(b?.type) ? b.type : "peaking";
@@ -103,13 +103,13 @@ function eqSanitize(e) {
     bands: bands.length ? bands : flatBands(),
     graphic
   };
-  // bande parametriche originali, conservate passando al grafico finché i cursori non vengono toccati
+  // original parametric bands, kept when switching to graphic until the sliders are touched
   if (out.mode === "graphic" && Array.isArray(e.paramBackup) && e.paramBackup.length) out.paramBackup = sanitizeBands(e.paramBackup);
   return out;
 }
 
-// Risposta in dB di un filtro alla frequenza f, con le formule RBJ usate da BiquadFilterNode
-// (shelf con pendenza S = 1; Q di passa-alto/basso in dB, come in Web Audio).
+// dB response of a filter at frequency f, using the RBJ formulas used by BiquadFilterNode
+// (shelves with slope S = 1; high-pass/low-pass Q in dB, as in Web Audio).
 function biquadDb(type, f0, gain, q, f, fs = 48000) {
   if (!gain && EQ_GAIN_TYPES.includes(type)) return 0;
   const A = Math.pow(10, gain / 40), w0 = (2 * Math.PI * f0) / fs, c = Math.cos(w0), s = Math.sin(w0);
@@ -141,7 +141,7 @@ function biquadDb(type, f0, gain, q, f, fs = 48000) {
 }
 const graphicFilterDb = (j, gain, f) => biquadDb(GRAPHIC_FILTERS[j].type, GRAPHIC_FILTERS[j].freq, gain, GRAPHIC_Q, f);
 
-// Sistema lineare n×n (eliminazione di Gauss con pivot).
+// n×n linear system (Gaussian elimination with pivoting).
 function solveLinear(M, y) {
   const n = y.length, A = M.map((r, i) => [...r, y[i]]);
   for (let c = 0; c < n; c++) {
@@ -157,8 +157,8 @@ function solveLinear(M, y) {
   return A.map((r, i) => r[n] / r[i]);
 }
 
-// Guadagni reali dei 10 filtri perché la curva complessiva valga esattamente quanto
-// indicano i cursori alle frequenze centrali (compensa la sovrapposizione tra bande).
+// Actual gains of the 10 filters so that the overall curve equals exactly what the
+// sliders show at the center frequencies (compensates for overlap between bands).
 const GRAPHIC_M = GRAPHIC_FREQS.map((fi) => GRAPHIC_FILTERS.map((_, j) => graphicFilterDb(j, 1, fi)));
 const graphicCache = new Map();
 function graphicFilterGains(sliders) {
@@ -168,7 +168,7 @@ function graphicFilterGains(sliders) {
   if (sliders.every((v) => v === 0)) x = sliders.map(() => 0);
   else {
     x = solveLinear(GRAPHIC_M, sliders);
-    // la risposta in dB non è perfettamente lineare nel guadagno: qualche passo di correzione
+    // the dB response is not perfectly linear in gain: a few correction steps
     for (let it = 0; it < 4; it++) {
       const err = GRAPHIC_FREQS.map((f, i) => sliders[i] - x.reduce((s, g, j) => s + graphicFilterDb(j, g, f), 0));
       const dx = solveLinear(GRAPHIC_M, err);
@@ -181,33 +181,33 @@ function graphicFilterGains(sliders) {
   return x;
 }
 
-// Bande effettivamente applicate dal motore audio, per la modalità attiva.
+// Bands actually applied by the audio engine, for the active mode.
 function eqActiveBands(e) {
   if (e.mode !== "graphic") return e.bands;
   const gains = graphicFilterGains(e.graphic);
   return GRAPHIC_FILTERS.map((flt, i) => ({ on: true, type: flt.type, freq: flt.freq, gain: gains[i], q: GRAPHIC_Q }));
 }
 
-// Copia le 10 bande grafiche nel parametrico, per rifinirle.
+// Copies the 10 graphic bands into parametric mode, for fine-tuning.
 function graphicToParametric(e) {
   return { ...e, mode: "parametric", bands: eqActiveBands({ ...e, mode: "graphic" }).map((b) => ({ ...b })) };
 }
 
-// Curva (senza preamp) di un insieme di bande parametriche, in dB alla frequenza f.
+// Curve (without preamp) of a set of parametric bands, in dB at frequency f.
 const bandsDb = (bands, f) => bands.reduce((s, b) => s + (b.on ? biquadDb(b.type, b.freq, b.gain, b.q, f) : 0), 0);
 
-// Un solo equalizzatore, due modi di modificarlo. Ritorna { eq, approxDb }.
-//   parametrico → grafico: i cursori prendono il valore medio della curva sulla loro ottava;
-//     le bande originali vengono conservate (paramBackup) e approxDb dice di quanto, al massimo,
-//     i 10 cursori si discostano dalla curva parametrica.
-//   grafico → parametrico: se i cursori non sono stati toccati si ritrovano le bande originali;
-//     altrimenti la curva dei cursori diventa bande parametriche identiche nel suono
-//     (tutti i cursori a zero → le 5 bande di partenza).
+// One equalizer, two ways to edit it. Returns { eq, approxDb }.
+//   parametric → graphic: the sliders take the average value of the curve over their octave;
+//     the original bands are kept (paramBackup) and approxDb tells by how much, at most,
+//     the 10 sliders deviate from the parametric curve.
+//   graphic → parametric: if the sliders weren't touched, the original bands come back;
+//     otherwise the slider curve becomes parametric bands that sound identical
+//     (all sliders at zero → the 5 starting bands).
 function eqSwitchMode(e, mode) {
   if (e.mode === mode) return { eq: e, approxDb: 0 };
   if (mode === "graphic") {
-    // ogni cursore prende la media della curva sulla sua ottava (½ ottava per parte):
-    // un dettaglio stretto (es. un notch) pesa quanto si sente, invece di diventare un buco largo
+    // each slider takes the average of the curve over its octave (½ octave on each side):
+    // a narrow detail (e.g. a notch) weighs as much as it is heard, instead of becoming a wide hole
     const avgDb = (fc) => {
       let sum = 0;
       const n = 24;
@@ -227,7 +227,7 @@ function eqSwitchMode(e, mode) {
   return { eq: graphicToParametric(rest), approxDb: 0 };
 }
 
-// Preset predefiniti. ID stabili; il nome mostrato è tradotto ("preset_<id senza g_>").
+// Built-in presets. Stable IDs; the displayed name is translated ("preset_<id without g_>").
 const presetG = (preamp, gains) => eqState("graphic", { preamp, graphic: gains });
 const presetP = (preamp, bands) => eqState("parametric", { preamp, bands });
 const EQ_BUILTIN_PRESETS = {
@@ -250,11 +250,11 @@ const EQ_BUILTIN_PRESETS = {
     eqBand("peaking", 4000, 0, 1), eqBand("highshelf", 8000, 4)])
 };
 
-// ---- Formato Equalizer APO / AutoEQ (ParametricEQ.txt) ----
+// ---- Equalizer APO / AutoEQ format (ParametricEQ.txt) ----
 //   Preamp: -6.2 dB
 //   Filter 1: ON PK Fc 105 Hz Gain 5.5 dB Q 0.70
-// In APO la Q di passa-alto/basso è lineare; in Web Audio è in dB (20·log10 Q).
-// Gli shelf di Web Audio hanno pendenza fissa (Q ≈ 0,71, quella usata da AutoEQ).
+// In APO the high-pass/low-pass Q is linear; in Web Audio it is in dB (20·log10 Q).
+// Web Audio shelves have a fixed slope (Q ≈ 0.71, the one used by AutoEQ).
 
 const APO_TYPES = {
   PK: "peaking", PEQ: "peaking", MODAL: "peaking",
@@ -264,7 +264,7 @@ const APO_TYPES = {
   NO: "notch", BP: "bandpass"
 };
 
-// Ritorna { eq, count, total, skipped } oppure null se non trova filtri.
+// Returns { eq, count, total, skipped } or null if no filters are found.
 function eqFromApo(text, base = eqFlat()) {
   const num = (s) => parseFloat(String(s).replace(",", "."));
   let preamp = 0;
