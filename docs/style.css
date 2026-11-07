@@ -65,7 +65,8 @@ h3 { font-size: 21px; margin: 0 0 8px; }
   display: inline-block; padding: 11px 20px; border-radius: 8px; font-weight: 600; font-size: 16px;
   background: var(--ink); color: var(--paper); text-decoration: none;
 }
-.button.waiting { background: transparent; color: var(--ink-2); border: 1.5px dashed var(--line); cursor: default; }
+.button:hover { opacity: .88; }
+.button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
 .small { font-size: 15px; color: var(--ink-3); margin-top: 18px; }
 
 /* screenshots: always clickable to zoom */

@@ -18,7 +18,7 @@ An equalizer for the sound of your Chrome tabs. Use it to bring out the voices i
 
 ## Install
 
-- **Chrome Web Store:** coming soon.
+- **Chrome Web Store:** [Bandwise EQ](https://chromewebstore.google.com/detail/bandwise-eq/pfefhdkgpknkcnjklobgbdjglndbfjmc).
 - **From source:** clone this repository, open `chrome://extensions`, enable *Developer mode*, click *Load unpacked* and select the repository folder.
 
 Requires Chrome 116 or later.
