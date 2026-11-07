@@ -3,77 +3,165 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bandwise EQ: an equalizer for every ear</title>
-  <meta name="description" content="Graphic and parametric equalizer for any Chrome tab, with spectrum analyzer, level-matched A/B and AutoEQ headphone profiles. Private: no network access.">
+  <title>Bandwise EQ, an equalizer for your browser tabs</title>
+  <meta name="description" content="A free, open source equalizer for the sound of your Chrome tabs, with a graphic and a parametric mode, a spectrum analyzer and AutoEQ headphone profiles. Made by Balrog994.">
   <meta property="og:title" content="Bandwise EQ">
-  <meta property="og:description" content="Graphic and parametric equalizer for any Chrome tab.">
-  <meta property="og:image" content="https://balrog994.github.io/bandwise-eq/img/social.png">
+  <meta property="og:description" content="An equalizer for the sound of your Chrome tabs.">
+  <meta property="og:image" content="img/social.png">
   <link rel="icon" href="img/icon-128.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="wrap">
-    <header class="nav">
-      <img src="img/icon-128.png" alt="">
-      <span class="name">Bandwise EQ</span>
-      <nav>
-        <a href="#features">Features</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="https://github.com/Balrog994/bandwise-eq">GitHub</a>
-      </nav>
-    </header>
+  <header class="wrap site-head">
+    <img src="img/icon-128.png" alt="">
+    <a class="name" href="./">Bandwise EQ</a>
+    <nav>
+      <a href="#tour">Tour</a>
+      <a href="#faq">FAQ</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="https://github.com/Balrog994/bandwise-eq">GitHub</a>
+    </nav>
+  </header>
 
-    <div class="hero">
-      <img class="logo" src="img/icon-128.png" alt="">
-      <h1>An equalizer for every ear</h1>
-      <p>Adjust the sound of any Chrome tab. It's easy if you just want to move a few sliders, and precise if you know exactly what you're after.</p>
-      <div class="cta">
-        <a class="btn primary disabled" id="store" href="#">Coming soon to the Chrome Web Store</a>
-        <a class="btn" href="https://github.com/Balrog994/bandwise-eq">Source code</a>
+  <main>
+    <section class="wrap hero">
+      <div>
+        <h1>An equalizer for your browser tabs.</h1>
+        <p class="lead">Fix the sound of a video, a podcast or a song playing in Chrome. Move a few sliders if that's all you need, or go into detail with a parametric EQ and a spectrum analyzer.</p>
+        <div class="actions">
+          <span class="button waiting">Chrome Web Store: coming soon</span>
+          <a href="https://github.com/Balrog994/bandwise-eq">Source code on GitHub</a>
+        </div>
+        <p class="small">A free, open source Chrome extension made by Balrog994. No account, no tracking, nothing leaves your computer.</p>
       </div>
-      <div class="tags"><span>No extra windows</span><span>No network access</span><span>No ads</span><span>Open source</span></div>
-      <div class="shot hero-shot"><img src="img/hero.png" alt="Bandwise EQ in graphic mode, with the spectrum analyzer" width="572" height="562"></div>
-    </div>
+      <a class="shot" href="img/popup.png"><img src="img/popup.png" width="572" height="562" alt="The Bandwise EQ popup in graphic mode, with ten sliders and the spectrum analyzer"></a>
+    </section>
 
-    <section id="features">
-      <h2>What it does</h2>
-      <div class="grid">
-        <div class="card"><h3>Two ways to adjust the sound</h3><p>Graphic mode has 10 classic sliders. Parametric mode gives you up to 10 free bands with 7 filter types. Both edit the same EQ, so you can start simple and switch when you need more control.</p></div>
-        <div class="card"><h3>See what you are changing</h3><p>A real-time spectrum analyzer shows the sound before and after the EQ. Hover over the graph to read the frequency, the EQ gain and the levels at that point.</p></div>
-        <div class="card"><h3>A fair before and after comparison</h3><p>Hold A/B to hear the original sound. Louder always seems better, so Bandwise matches the volume of the two versions and you compare the tone, not the loudness.</p></div>
-        <div class="card"><h3>Headphone correction</h3><p>Import headphone profiles from AutoEQ or any Equalizer APO parametric file, and export your own settings in the same format.</p></div>
-        <div class="card"><h3>It remembers your settings</h3><p>Save your own presets, keep separate settings for each tab, and pin a site so it gets its settings back every time you open it.</p></div>
-        <div class="card"><h3>Private by design</h3><p>The audio is processed on your computer and never leaves it. Bandwise EQ doesn't read the pages you visit and has no network access, no analytics and no ads.</p></div>
+    <section class="note">
+      <div class="wrap narrow">
+        <p>I used to rely on another equalizer extension, mostly for YouTube. It did the job, but it forgot my settings every time I opened it, and it had to open a separate window to route the audio.</p>
+        <p>So I wrote my own. Bandwise EQ remembers what you set, for each tab and, if you want, for each site. You open it, adjust, close it, and it keeps working in the background. Along the way it grew a proper spectrum analyzer, because a frequency is much easier to fix when you can see it.</p>
+        <p class="sign"><strong>Balrog994</strong>, my nickname since 1994</p>
       </div>
     </section>
 
-    <section>
-      <h2>A closer look</h2>
-      <div class="gallery">
-        <img src="img/en-1-graphic.png" alt="Graphic mode">
-        <img src="img/en-2-parametric.png" alt="Parametric mode">
-        <img src="img/en-3-analyzer.png" alt="Spectrum analyzer with crosshair readout">
-        <img src="img/en-4-ab.png" alt="Level-matched A/B comparison">
-        <img src="img/en-5-advanced.png" alt="All bands view">
+    <section class="tour" id="tour">
+      <div class="wrap">
+        <h2>A quick tour</h2>
+        <p class="intro">Everything happens in one small window. Here is what each part does, with a few things worth trying.</p>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Start with the sliders</h3>
+            <p>Ten sliders, from deep bass at 31 Hz up to 16 kHz. Drag them, or drag the dots on the graph. The curve passes exactly through the values you set, with no bumps in between.</p>
+            <p class="tip"><strong>Try this:</strong> if voices sound muffled, lower 250 Hz a little and raise 2k. If a video booms, pull 62 Hz down.</p>
+          </div>
+          <figure>
+            <a class="shot" href="img/tour-sliders.png"><img src="img/tour-sliders.png" width="548" height="190" alt="The ten graphic EQ sliders"></a>
+          </figure>
+        </div>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Go parametric for precise work</h3>
+            <p>Up to ten bands, each with its own frequency, gain and width (Q), and seven filter types: bell, shelves, high-pass, low-pass, notch and band-pass. Both modes edit the same EQ, so your curve comes with you when you switch. Go from parametric to the sliders and back without moving any, and your original bands are still there.</p>
+            <p class="tip"><strong>Try this:</strong> type <code>2.5k</code> in a frequency field, drag a knob up or down, and hold <kbd>Shift</kbd> for fine steps.</p>
+          </div>
+          <figure>
+            <a class="shot" href="img/tour-parametric.png"><img src="img/tour-parametric.png" width="572" height="449" alt="Parametric mode with five bands; the selected band's curve is highlighted"></a>
+            <figcaption>The highlighted area shows exactly what the selected band is doing.</figcaption>
+          </figure>
+        </div>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Look before you turn a knob</h3>
+            <p>The analyzer shows the sound before the EQ and after it, with an optional peak hold. Hover over the graph and it tells you the frequency, how much the EQ changes it, and the level of the sound at that point.</p>
+            <p class="tip"><strong>Try this:</strong> a hum on a recording shows up as a narrow spike, often at 50 or 60 Hz. Put a notch filter right on it.</p>
+          </div>
+          <figure>
+            <a class="shot" href="img/tour-analyzer.png"><img src="img/tour-analyzer.png" width="548" height="322" alt="The spectrum analyzer with the crosshair reading frequency and levels"></a>
+          </figure>
+        </div>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Compare at the same volume</h3>
+            <p>Hold the A/B button to hear the original sound. Louder almost always seems better, which makes comparisons misleading, so Bandwise plays the original at the same loudness as your EQ. The orange label tells you how much it compensated. <kbd>Shift</kbd>+click keeps the bypass on.</p>
+          </div>
+          <figure>
+            <a class="shot" href="img/tour-ab.png"><img src="img/tour-ab.png" width="410" height="322" alt="Bypass active with level matching, next to the preamp fader and output meter"></a>
+            <figcaption>Next to it: the preamp fader and the stereo output meter.</figcaption>
+          </figure>
+        </div>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Bring your headphone profile</h3>
+            <p>AutoEQ publishes correction curves for thousands of headphones. Pick yours on <a href="https://autoeq.app">autoeq.app</a>, choose <strong>EqualizerAPO ParametricEq</strong> as the app, download the file, and open it from the preset menu under <em>Import headphone profile</em>. Save it as a preset and it's there whenever you need it.</p>
+          </div>
+          <figure>
+            <a class="shot" href="img/tour-import.png"><img src="img/tour-import.png" width="528" height="386" alt="The import dialog with the three steps to get a profile from autoeq.app"></a>
+          </figure>
+        </div>
       </div>
     </section>
 
-    <section>
-      <h2>How to use</h2>
-      <ol class="steps">
-        <li>Play something in a tab: a video, a song, a podcast.</li>
-        <li>Click the <b>Bandwise EQ</b> icon and turn it on.</li>
-        <li>Adjust the sound. You can close the popup whenever you like.</li>
-      </ol>
+    <section class="start note">
+      <div class="wrap narrow">
+        <h2>Getting started</h2>
+        <ol>
+          <li><strong>Play something</strong> in a tab: a video, a song, a podcast.</li>
+          <li><strong>Click the Bandwise EQ icon</strong> in the toolbar and turn it on.</li>
+          <li><strong>Adjust the sound.</strong> You can close the popup whenever you like; the EQ keeps working until you turn it off or close the tab.</li>
+        </ol>
+      </div>
     </section>
-  </div>
 
-  <footer>
+    <section class="faq" id="faq">
+      <div class="wrap narrow">
+        <h2>Questions</h2>
+        <details>
+          <summary>Why does Chrome say the tab is being captured?</summary>
+          <p>That's how Chrome lets an extension work with the sound of a tab: it hands the audio over and shows an indicator so you know. Bandwise processes the audio on your computer and plays it back straight away. Nothing is recorded or sent anywhere.</p>
+        </details>
+        <details>
+          <summary>Does it work on every site?</summary>
+          <p>It works on any normal web page that plays sound. Chrome's own pages (like settings or the Web Store) can't be processed, and some streaming services that use DRM protection may not allow it.</p>
+        </details>
+        <details>
+          <summary>Can I use different settings on different tabs?</summary>
+          <p>Yes. Each tab keeps its own settings until you close it. If you want a site to always sound a certain way, open the popup on that site and click the pin next to the preset menu.</p>
+        </details>
+        <details>
+          <summary>Which option should I pick on autoeq.app?</summary>
+          <p><strong>EqualizerAPO ParametricEq</strong>. It produces ten filters, which is exactly what Bandwise supports, in a format it reads directly.</p>
+        </details>
+        <details>
+          <summary>Why ten bands at most?</summary>
+          <p>Ten bands are enough for almost any correction, they fit comfortably in a small popup, and they match the ten filters AutoEQ uses for headphone profiles.</p>
+        </details>
+        <details>
+          <summary>Is it really free? What about my data?</summary>
+          <p>It's free and open source under the GPL-3.0. It has no network access, collects nothing, shows no ads and doesn't read the pages you visit. The <a href="privacy.html">privacy policy</a> has the details, and the code is on <a href="https://github.com/Balrog994/bandwise-eq">GitHub</a> if you'd like to check.</p>
+        </details>
+        <details>
+          <summary>I found a bug or have an idea</summary>
+          <p>Please open an issue on <a href="https://github.com/Balrog994/bandwise-eq/issues">GitHub</a>. Bug reports with the site where it happened are especially helpful.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
     <div class="wrap">
-      <span class="grow">Bandwise EQ is free and open source (GPL-3.0).</span>
+      <span class="grow">Bandwise EQ is made by Balrog994 and released under the GPL-3.0.</span>
       <a href="privacy.html">Privacy policy</a>
-      <a href="https://github.com/Balrog994/bandwise-eq/issues">Feedback &amp; issues</a>
+      <a href="https://github.com/Balrog994/bandwise-eq">Source code</a>
+      <a href="https://github.com/Balrog994/bandwise-eq/issues">Report a problem</a>
     </div>
   </footer>
+
+  <script src="site.js"></script>
 </body>
 </html>

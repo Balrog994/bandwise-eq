@@ -3,37 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bandwise EQ: Privacy policy</title>
+  <title>Bandwise EQ: privacy policy</title>
   <link rel="icon" href="img/icon-128.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="wrap">
-    <header class="nav">
-      <img src="img/icon-128.png" alt="">
-      <a class="name" href="index.html" style="color:inherit">Bandwise EQ</a>
-      <nav>
-        <a href="#en">English</a>
-        <a href="#it">Italiano</a>
-        <a href="https://github.com/Balrog994/bandwise-eq">GitHub</a>
-      </nav>
-    </header>
-  </div>
+  <header class="wrap site-head">
+    <img src="img/icon-128.png" alt="">
+    <a class="name" href="./">Bandwise EQ</a>
+    <nav>
+      <a href="./#tour">Tour</a>
+      <a href="./#faq">FAQ</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="https://github.com/Balrog994/bandwise-eq">GitHub</a>
+    </nav>
+  </header>
 
-  <main class="doc">
+  <main class="wrap narrow doc">
     <article id="en" lang="en">
       <h1>Privacy policy</h1>
-      <div class="date">Last updated: November 7, 2026</div>
+      <p class="date">Last updated: November 7, 2026. <a href="#it">Leggi in italiano</a></p>
       <p>Bandwise EQ is a browser extension that equalizes the audio of browser tabs. It is designed to work entirely on your device.</p>
 
-      <h2>Data we collect</h2>
-      <p><strong>None.</strong> Bandwise EQ does not collect, transmit, sell or share any personal or usage data. It has no analytics, no tracking, no advertising and makes no network requests.</p>
+      <h2>Data collected</h2>
+      <p><strong>None.</strong> Bandwise EQ does not collect, transmit, sell or share any personal or usage data. It has no analytics, no tracking and no advertising, and it makes no network requests.</p>
 
-      <h2>How the extension works with your data</h2>
+      <h2>How the extension handles your data</h2>
       <ul>
         <li><strong>Tab audio.</strong> When you turn the equalizer on for a tab, Chrome gives the extension that tab's audio stream. The audio is filtered, analyzed (spectrum and level meters) and played back in real time, entirely in memory on your device. It is never recorded, saved or sent anywhere. Capture stops when you turn the equalizer off or close the tab.</li>
-        <li><strong>Settings.</strong> Your equalizer settings, presets, display preferences and the list of sites you chose to "remember" (their host names, e.g. <code>youtube.com</code>) are saved with Chrome's extension storage on your device. The extension does not send them to any server.</li>
-        <li><strong>Current site.</strong> When you open the popup, the extension reads the host name of the current tab (via the <code>activeTab</code> permission) only to offer the optional per-site memory. It does not read or modify the content of any web page.</li>
+        <li><strong>Settings.</strong> Your equalizer settings, presets, display preferences and the list of sites you chose to remember (their host names, for example <code>youtube.com</code>) are saved in Chrome's extension storage on your device. The extension does not send them to any server.</li>
+        <li><strong>Current site.</strong> When you open the popup, the extension reads the host name of the current tab (through the <code>activeTab</code> permission) only to offer the optional per-site memory. It does not read or modify the content of any web page.</li>
       </ul>
 
       <h2>Permissions</h2>
@@ -46,7 +45,7 @@
       </table>
 
       <h2>Third parties</h2>
-      <p>The extension does not use any third-party service.</p>
+      <p>The extension does not use any third-party service. This website doesn't either: no analytics, no external fonts.</p>
 
       <h2>Changes</h2>
       <p>If this policy changes, the new version will be published on this page with an updated date.</p>
@@ -59,7 +58,7 @@
 
     <article id="it" lang="it">
       <h1>Informativa sulla privacy</h1>
-      <div class="date">Ultimo aggiornamento: 7 novembre 2026</div>
+      <p class="date">Ultimo aggiornamento: 7 novembre 2026. <a href="#en">Read in English</a></p>
       <p>Bandwise EQ è un'estensione del browser che equalizza l'audio delle schede. Funziona interamente sul tuo dispositivo.</p>
 
       <h2>Dati raccolti</h2>
@@ -68,7 +67,7 @@
       <h2>Come l'estensione tratta i dati</h2>
       <ul>
         <li><strong>Audio della scheda.</strong> Quando attivi l'equalizzatore su una scheda, Chrome fornisce all'estensione l'audio di quella scheda. L'audio viene filtrato, analizzato (spettro e livelli) e riprodotto in tempo reale, interamente in memoria sul tuo dispositivo. Non viene mai registrato, salvato o inviato altrove. La cattura termina quando disattivi l'equalizzatore o chiudi la scheda.</li>
-        <li><strong>Impostazioni.</strong> Impostazioni, preset, preferenze di visualizzazione e l'elenco dei siti che hai scelto di "ricordare" (il loro nome, es. <code>youtube.com</code>) sono salvati nella memoria dell'estensione di Chrome sul tuo dispositivo. L'estensione non li invia ad alcun server.</li>
+        <li><strong>Impostazioni.</strong> Impostazioni, preset, preferenze di visualizzazione e l'elenco dei siti che hai scelto di ricordare (il loro nome, per esempio <code>youtube.com</code>) sono salvati nella memoria dell'estensione di Chrome sul tuo dispositivo. L'estensione non li invia ad alcun server.</li>
         <li><strong>Sito corrente.</strong> Quando apri il popup, l'estensione legge il nome del sito della scheda corrente (permesso <code>activeTab</code>) solo per offrire la memoria per sito facoltativa. Non legge né modifica il contenuto delle pagine.</li>
       </ul>
 
@@ -82,7 +81,7 @@
       </table>
 
       <h2>Terze parti</h2>
-      <p>L'estensione non usa servizi di terze parti.</p>
+      <p>L'estensione non usa servizi di terze parti. Nemmeno questo sito: niente statistiche, niente font esterni.</p>
 
       <h2>Modifiche</h2>
       <p>Se questa informativa cambia, la nuova versione sarà pubblicata su questa pagina con la data aggiornata.</p>
@@ -92,11 +91,12 @@
     </article>
   </main>
 
-  <footer>
+  <footer class="site-foot">
     <div class="wrap">
-      <span class="grow">Bandwise EQ is free and open source (GPL-3.0).</span>
-      <a href="index.html">Home</a>
-      <a href="https://github.com/Balrog994/bandwise-eq/issues">Feedback &amp; issues</a>
+      <span class="grow">Bandwise EQ is made by Balrog994 and released under the GPL-3.0.</span>
+      <a href="./">Home</a>
+      <a href="https://github.com/Balrog994/bandwise-eq">Source code</a>
+      <a href="https://github.com/Balrog994/bandwise-eq/issues">Report a problem</a>
     </div>
   </footer>
 </body>
