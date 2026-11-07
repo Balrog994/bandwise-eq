@@ -1,16 +1,18 @@
 /* Bandwise EQ website. System fonts only: the site makes no third-party requests. */
 :root {
-  --paper: #f7f4ee; --paper-2: #efe9df; --card: #fffdf9;
-  --ink: #1f1d1a; --ink-2: #57514a; --ink-3: #8a837a; --line: #ddd5c8;
-  --link: #1d4fbf;
+  /* cool palette taken from the extension (blue-grey neutrals, icon blue) so screenshots sit naturally */
+  --paper: #f3f5f8; --paper-2: #e8ecf2; --card: #ffffff;
+  --ink: #171a20; --ink-2: #4a5260; --ink-3: #7a8392; --line: #d6dce5;
+  --link: #1a56c9;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #1a1917; --paper-2: #23211e; --card: #262420;
-    --ink: #ece7df; --ink-2: #bdb5aa; --ink-3: #8f877d; --line: #3a3631;
+    /* same greys as the extension's dark display */
+    --paper: #14171c; --paper-2: #1b1f26; --card: #1f242c;
+    --ink: #e6e8eb; --ink-2: #b4bac4; --ink-3: #8a919b; --line: #2c323b;
     --link: #8ab4f8;
   }
 }
@@ -48,7 +50,7 @@ h3 { font-size: 21px; margin: 0 0 8px; }
 
 /* screenshots: always clickable to zoom */
 .shot { display: block; width: fit-content; max-width: 100%; border-radius: 12px; overflow: hidden; cursor: zoom-in; background: #202124;
-  box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 18px 40px rgba(40,30,20,.18); }
+  box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 18px 40px rgba(20,30,50,.18); }
 .shot:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; }
 figure { margin: 0; }
 figcaption { font-size: 14px; color: var(--ink-3); margin-top: 10px; }
@@ -95,7 +97,7 @@ kbd, code { font-family: var(--mono); font-size: .9em; background: var(--paper-2
 
 /* zoom (lightbox) */
 dialog.zoom { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 94vh; }
-dialog.zoom::backdrop { background: rgba(15, 13, 10, .82); }
+dialog.zoom::backdrop { background: rgba(10, 13, 18, .85); }
 dialog.zoom img { max-width: 96vw; max-height: 94vh; width: auto; border-radius: 10px; cursor: zoom-out; }
 
 /* privacy page */
