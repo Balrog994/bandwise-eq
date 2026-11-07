@@ -13,7 +13,7 @@ An equalizer for the sound of your Chrome tabs. Use it to bring out the voices i
 - **Headphone profiles:** import and export AutoEQ and Equalizer APO `ParametricEQ.txt` files.
 - **Settings that stick:** separate settings for each tab, optional per-site memory, built-in and personal presets, a preamp fader and an output limiter.
 - **No extra windows:** the audio engine runs in an offscreen document, so you can close the popup and keep listening.
-- **Private:** no network access, no analytics and no access to page content. See the [privacy policy](https://balrog994.github.io/bandwise-eq/privacy.html).
+- **Private:** no network access, no analytics and no access to page content. See the [privacy policy](https://bandwise.ilbalrog.it/privacy.html).
 - English and Italian.
 
 ## Install
