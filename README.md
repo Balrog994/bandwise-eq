@@ -2,7 +2,7 @@
 
 An equalizer for the sound of your browser tabs in Chrome and Microsoft Edge. Use it to bring out the voices in a podcast, soften harsh highs on a video, add some bass to music on Spotify Web, or correct the sound of your headphones with an AutoEQ profile.
 
-![Bandwise EQ](docs/img/social.png)
+![Bandwise EQ](docs/img/og-en.png)
 
 ## Features
 
