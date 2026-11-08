@@ -29,7 +29,8 @@
   const sync = () => {
     const dark = isDark();
     button.classList.toggle("is-dark", dark);
-    const label = dark ? "Switch to light theme" : "Switch to dark theme";
+    const it = html.lang === "it";
+    const label = dark ? (it ? "Passa al tema chiaro" : "Switch to light theme") : (it ? "Passa al tema scuro" : "Switch to dark theme");
     button.setAttribute("aria-label", label);
     button.title = label;
   };
@@ -51,7 +52,7 @@ for (const link of document.querySelectorAll("a.video[data-youtube]")) {
     e.preventDefault();
     const frame = document.createElement("iframe");
     frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(link.dataset.youtube)}?autoplay=1&rel=0`;
-    frame.title = "Bandwise EQ demo video";
+    frame.title = document.documentElement.lang === "it" ? "Video dimostrativo di Bandwise EQ" : "Bandwise EQ demo video";
     frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     frame.allowFullscreen = true;
     const box = document.createElement("div");
@@ -60,4 +61,10 @@ for (const link of document.querySelectorAll("a.video[data-youtube]")) {
     link.replaceWith(box);
     frame.focus();
   });
+}
+
+// Language button: the choice is remembered in this browser (localStorage, no cookies),
+// so the automatic switch to Italian on the home page no longer applies.
+for (const link of document.querySelectorAll("a.lang[data-lang]")) {
+  link.addEventListener("click", () => { try { localStorage.setItem("lang", link.dataset.lang); } catch {} });
 }

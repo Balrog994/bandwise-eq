@@ -4,12 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bandwise EQ, an equalizer for your browser tabs</title>
-  <meta name="description" content="A free, open source equalizer for the sound of your browser tabs in Chrome and Edge, with a graphic and a parametric mode, a spectrum analyzer and AutoEQ headphone profiles. Made by Balrog994.">
+  <meta name="description" content="A free, open source equalizer for the sound of your browser tabs in Chrome and Edge, with a graphic and a parametric mode, a spectrum analyzer and AutoEQ headphone profiles.">
   <meta property="og:title" content="Bandwise EQ">
   <meta property="og:description" content="An equalizer for the sound of your browser tabs.">
   <meta property="og:image" content="img/social.png">
+  <link rel="canonical" href="https://bandwise.ilbalrog.it/">
+  <link rel="alternate" hreflang="en" href="https://bandwise.ilbalrog.it/">
+  <link rel="alternate" hreflang="it" href="https://bandwise.ilbalrog.it/it/">
+  <link rel="alternate" hreflang="x-default" href="https://bandwise.ilbalrog.it/">
   <link rel="icon" href="img/icon-128.png">
   <link rel="stylesheet" href="style.css">
+  <!-- first visit: if the browser prefers Italian, go to the Italian page; a choice made with the IT/EN button always wins -->
+  <script>(() => {
+    let saved = null;
+    try { saved = localStorage.getItem("lang"); } catch {}
+    const browser = (navigator.languages || [navigator.language]).map((l) => String(l).slice(0, 2).toLowerCase()).find((l) => l === "it" || l === "en");
+    if ((saved || browser) === "it" && !/bot|crawl|spider|slurp/i.test(navigator.userAgent)) location.replace("it/" + location.hash);
+  })();</script>
   <!-- apply the saved theme before the page is drawn, to avoid a flash -->
   <script>try { const t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch {}</script>
 </head>
@@ -22,6 +33,7 @@
       <a href="#faq">FAQ</a>
       <a href="privacy.html">Privacy</a>
       <a href="https://github.com/Balrog994/bandwise-eq">GitHub</a>
+      <a class="lang" href="it/" hreflang="it" lang="it" data-lang="it" title="Italiano" aria-label="Italiano">IT</a>
       <button class="theme-toggle" type="button" aria-label="Switch theme">
         <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
@@ -37,9 +49,9 @@
         <div class="actions">
           <a class="button" href="https://chromewebstore.google.com/detail/bandwise-eq/pfefhdkgpknkcnjklobgbdjglndbfjmc">Add to Chrome</a>
           <a class="button secondary" href="https://microsoftedge.microsoft.com/addons/detail/ndgnjdgkncfkpemcapnbbpcjgmkjfijc">Add to Edge</a>
-          <a href="https://github.com/Balrog994/bandwise-eq">Source code on GitHub</a>
+          <a class="button secondary icon" href="https://github.com/Balrog994/bandwise-eq" aria-label="Source code on GitHub" title="Source code on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
         </div>
-        <p class="small">A free, open source extension for Chrome and Edge, made by Balrog994. No account, no tracking, nothing leaves your computer.</p>
+        <p class="small">A free, open source extension for Chrome and Edge. No account, no tracking, nothing leaves your computer.</p>
       </div>
       <a class="shot" href="img/popup.png"><img src="img/popup.png" width="572" height="562" alt="The Bandwise EQ popup in graphic mode, with ten sliders and the spectrum analyzer"></a>
     </section>
@@ -51,14 +63,12 @@
         <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
         <span class="visually-hidden">Play the demo video (56 seconds)</span>
       </a>
-      <p class="small">56 seconds, with sound. The YouTube player loads only when you press play.</p>
     </section>
 
     <section class="note">
       <div class="wrap narrow">
-        <p>I used to rely on another equalizer extension, mostly for YouTube. It did the job, but it forgot my settings every time I opened it, and it had to open a separate window to route the audio.</p>
+        <p>I used to rely on another equalizer extension, mostly for YouTube. It did the job, but it forgot my settings every time I opened it, and I had to keep a separate window open to make it work.</p>
         <p>So I wrote my own. Bandwise EQ remembers what you set, for each tab and, if you want, for each site. You open it, adjust, close it, and it keeps working in the background. Along the way it grew a proper spectrum analyzer, because a frequency is much easier to fix when you can see it.</p>
-        <p class="sign"><strong>Balrog994</strong></p>
       </div>
     </section>
 

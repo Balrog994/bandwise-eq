@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bandwise EQ, un equalizzatore per le schede del browser</title>
+  <meta name="description" content="Un equalizzatore gratuito e open source per l'audio delle schede di Chrome ed Edge, con modalità grafica e parametrica, analizzatore di spettro e profili per cuffie di AutoEQ. Interfaccia in italiano.">
+  <meta property="og:title" content="Bandwise EQ">
+  <meta property="og:description" content="Un equalizzatore per l'audio delle schede del browser.">
+  <meta property="og:image" content="../img/social.png">
+  <link rel="canonical" href="https://bandwise.ilbalrog.it/it/">
+  <link rel="alternate" hreflang="en" href="https://bandwise.ilbalrog.it/">
+  <link rel="alternate" hreflang="it" href="https://bandwise.ilbalrog.it/it/">
+  <link rel="alternate" hreflang="x-default" href="https://bandwise.ilbalrog.it/">
+  <link rel="icon" href="../img/icon-128.png">
+  <link rel="stylesheet" href="../style.css">
+  <!-- if the visitor chose English with the IT/EN button, respect it -->
+  <script>try { if (localStorage.getItem("lang") === "en") location.replace("../" + location.hash); } catch {}</script>
+  <!-- apply the saved theme before the page is drawn, to avoid a flash -->
+  <script>try { const t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch {}</script>
+</head>
+<body>
+  <header class="wrap site-head">
+    <img src="../img/icon-128.png" alt="">
+    <a class="name" href="./">Bandwise EQ</a>
+    <nav>
+      <a href="#tour">Tour</a>
+      <a href="#faq">FAQ</a>
+      <a href="../privacy.html#it">Privacy</a>
+      <a href="https://github.com/Balrog994/bandwise-eq">GitHub</a>
+      <a class="lang" href="../" hreflang="en" lang="en" data-lang="en" title="English" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button" aria-label="Cambia tema">
+        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="wrap hero">
+      <div>
+        <h1>Un equalizzatore per le schede del browser.</h1>
+        <p class="lead">Sistema l'audio di un video, di un podcast o di una canzone che suona in Chrome o in Edge. Muovi qualche cursore se ti basta, oppure entra nel dettaglio con un EQ parametrico e un analizzatore di spettro.</p>
+        <div class="actions">
+          <a class="button" href="https://chromewebstore.google.com/detail/bandwise-eq/pfefhdkgpknkcnjklobgbdjglndbfjmc?hl=it">Aggiungi a Chrome</a>
+          <a class="button secondary" href="https://microsoftedge.microsoft.com/addons/detail/ndgnjdgkncfkpemcapnbbpcjgmkjfijc?hl=it-IT">Aggiungi a Edge</a>
+          <a class="button secondary icon" href="https://github.com/Balrog994/bandwise-eq" aria-label="Codice sorgente su GitHub" title="Codice sorgente su GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+        </div>
+        <p class="small">Un'estensione gratuita e open source per Chrome ed Edge. Nessun account, nessun tracciamento, nulla lascia il tuo computer.</p>
+      </div>
+      <a class="shot" href="../img/it/popup.png"><img src="../img/it/popup.png" width="572" height="562" alt="Il popup di Bandwise EQ in modalità grafica, con dieci cursori e l'analizzatore di spettro"></a>
+    </section>
+
+    <section class="wrap demo" id="video">
+      <h2>Guardala in azione</h2>
+      <a class="video" href="https://www.youtube.com/watch?v=FUj8eyS_9qg" data-youtube="FUj8eyS_9qg">
+        <img src="../img/it/video-poster.jpg" width="1600" height="900" loading="lazy" alt="Un fotogramma del video dimostrativo: il popup di Bandwise EQ con i cursori spostati e l'analizzatore di spettro">
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
+        <span class="visually-hidden">Guarda il video dimostrativo (56 secondi)</span>
+      </a>
+    </section>
+
+    <section class="note">
+      <div class="wrap narrow">
+        <p>Prima usavo un'altra estensione per equalizzare, soprattutto su YouTube. Faceva il suo lavoro, ma ogni volta che la aprivo aveva dimenticato le impostazioni, e per farla funzionare dovevo tenere aperta una finestra separata.</p>
+        <p>Così ho scritto la mia. Bandwise EQ ricorda quello che imposti, per ogni scheda e, se vuoi, per ogni sito. La apri, regoli, la chiudi, e continua a lavorare in sottofondo. Strada facendo si è guadagnata anche un vero analizzatore di spettro, perché una frequenza si corregge molto meglio quando la vedi.</p>
+      </div>
+    </section>
+
+    <section class="tour" id="tour">
+      <div class="wrap">
+        <h2>Un giro veloce</h2>
+        <p class="intro">Tutto succede in una piccola finestra. Ecco a cosa serve ogni parte, con qualche prova da fare.</p>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Comincia dai cursori</h3>
+            <p>Dieci cursori, dai bassi profondi a 31 Hz fino a 16 kHz. Trascinali, oppure trascina i punti sul grafico. La curva passa esattamente per i valori che imposti, senza gobbe in mezzo.</p>
+            <p class="tip"><strong>Prova così:</strong> se le voci suonano ovattate, abbassa un po' i 250 Hz e alza i 2k. Se un video rimbomba, abbassa i 62 Hz.</p>
+          </div>
+          <figure>
+            <a class="shot" href="../img/it/tour-sliders.png"><img src="../img/it/tour-sliders.png" width="548" height="190" alt="I dieci cursori dell'EQ grafico"></a>
+          </figure>
+        </div>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Passa al parametrico per il lavoro di precisione</h3>
+            <p>Fino a dieci bande, ognuna con la sua frequenza, il suo guadagno e la sua larghezza (Q), e sette tipi di filtro: campana, shelf, passa-alto, passa-basso, notch e passa-banda. Le due modalità modificano lo stesso EQ, quindi la curva ti segue quando cambi. Se passi dal parametrico ai cursori e torni indietro senza toccare nulla, ritrovi le bande originali.</p>
+            <p class="tip"><strong>Prova così:</strong> scrivi <code>2,5k</code> in un campo frequenza, trascina una manopola in su o in giù, e tieni premuto <kbd>Maiusc</kbd> per i passi fini.</p>
+          </div>
+          <figure>
+            <a class="shot" href="../img/it/tour-parametric.png"><img src="../img/it/tour-parametric.png" width="572" height="449" alt="Modalità parametrica con cinque bande; la curva della banda selezionata è evidenziata"></a>
+            <figcaption>L'area evidenziata mostra esattamente cosa sta facendo la banda selezionata.</figcaption>
+          </figure>
+        </div>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Guarda prima di girare una manopola</h3>
+            <p>L'analizzatore mostra il suono prima e dopo l'EQ, con la memoria dei picchi se la vuoi. Passa il mouse sul grafico e ti dice la frequenza, quanto la modifica l'EQ e il livello del suono in quel punto.</p>
+            <p class="tip"><strong>Prova così:</strong> un ronzio in una registrazione si vede come un picco stretto, spesso a 50 o 60 Hz. Mettici sopra un filtro notch.</p>
+          </div>
+          <figure>
+            <a class="shot" href="../img/it/tour-analyzer.png"><img src="../img/it/tour-analyzer.png" width="548" height="322" alt="L'analizzatore di spettro con il mirino che legge frequenza e livelli"></a>
+          </figure>
+        </div>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Confronta allo stesso volume</h3>
+            <p>Tieni premuto il pulsante A/B per sentire il suono originale. Quello più forte sembra quasi sempre migliore, e questo rende i confronti ingannevoli: per questo Bandwise riproduce l'originale alla stessa loudness del tuo EQ. L'etichetta arancione ti dice di quanto ha compensato. Con <kbd>Maiusc</kbd>+clic il bypass resta attivo.</p>
+          </div>
+          <figure>
+            <a class="shot" href="../img/it/tour-ab.png"><img src="../img/it/tour-ab.png" width="410" height="322" alt="Bypass attivo con il volume pareggiato, accanto al fader del preamp e al meter di uscita"></a>
+            <figcaption>Accanto: il fader del preamp e il meter stereo di uscita.</figcaption>
+          </figure>
+        </div>
+
+        <div class="step">
+          <div class="step-text">
+            <h3>Porta il profilo delle tue cuffie</h3>
+            <p>AutoEQ pubblica curve di correzione per migliaia di cuffie. Scegli le tue su <a href="https://autoeq.app">autoeq.app</a>, seleziona <strong>EqualizerAPO ParametricEq</strong> come app, scarica il file e aprilo dal menu dei preset con <em>Importa profilo cuffie</em>. Salvalo come preset e lo ritrovi ogni volta che ti serve.</p>
+          </div>
+          <figure>
+            <a class="shot" href="../img/it/tour-import.png"><img src="../img/it/tour-import.png" width="528" height="386" alt="La finestra di importazione con i tre passaggi per prendere un profilo da autoeq.app"></a>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="start note">
+      <div class="wrap narrow">
+        <h2>Per cominciare</h2>
+        <ol>
+          <li><strong>Installa Bandwise EQ</strong> dal <a href="https://chromewebstore.google.com/detail/bandwise-eq/pfefhdkgpknkcnjklobgbdjglndbfjmc?hl=it">Chrome Web Store</a> o da <a href="https://microsoftedge.microsoft.com/addons/detail/ndgnjdgkncfkpemcapnbbpcjgmkjfijc?hl=it-IT">Microsoft Edge Add-ons</a>.</li>
+          <li><strong>Fai partire qualcosa</strong> in una scheda: un video, una canzone, un podcast.</li>
+          <li><strong>Clicca l'icona di Bandwise EQ</strong> nella barra degli strumenti e accendila.</li>
+          <li><strong>Regola il suono.</strong> Puoi chiudere il popup quando vuoi: l'EQ continua a funzionare finché non lo spegni o chiudi la scheda.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="faq" id="faq">
+      <div class="wrap narrow">
+        <h2>Domande</h2>
+        <details>
+          <summary>Perché il browser dice che la scheda viene catturata?</summary>
+          <p>È il modo in cui il browser permette a un'estensione di lavorare sull'audio di una scheda: le passa il suono e mostra un indicatore perché tu lo sappia. Bandwise elabora l'audio sul tuo computer e lo riproduce subito. Niente viene registrato o inviato da nessuna parte.</p>
+        </details>
+        <details>
+          <summary>Funziona su tutti i siti?</summary>
+          <p>Funziona su qualsiasi normale pagina web che riproduce suoni. Le pagine interne del browser (come le impostazioni o lo store delle estensioni) non possono essere elaborate, e alcuni servizi di streaming protetti da DRM potrebbero non permetterlo.</p>
+        </details>
+        <details>
+          <summary>Posso usare impostazioni diverse in schede diverse?</summary>
+          <p>Sì. Ogni scheda tiene le sue impostazioni finché non la chiudi. Se vuoi che un sito suoni sempre in un certo modo, apri il popup su quel sito e clicca la puntina accanto al menu dei preset.</p>
+        </details>
+        <details>
+          <summary>Quale opzione devo scegliere su autoeq.app?</summary>
+          <p><strong>EqualizerAPO ParametricEq</strong>. Produce dieci filtri, esattamente quelli che Bandwise supporta, in un formato che legge direttamente.</p>
+        </details>
+        <details>
+          <summary>Perché al massimo dieci bande?</summary>
+          <p>Dieci bande bastano per quasi ogni correzione, stanno comode in un popup piccolo e corrispondono ai dieci filtri che AutoEQ usa per i profili delle cuffie.</p>
+        </details>
+        <details>
+          <summary>È davvero gratuita? E i miei dati?</summary>
+          <p>È gratuita e open source, con licenza GPL-3.0. Non accede alla rete, non raccoglie nulla, non mostra pubblicità e non legge le pagine che visiti. I dettagli sono nell'<a href="../privacy.html#it">informativa sulla privacy</a>, e il codice è su <a href="https://github.com/Balrog994/bandwise-eq">GitHub</a> se vuoi controllare.</p>
+        </details>
+        <details>
+          <summary>Ho trovato un bug o ho un'idea</summary>
+          <p>Apri una segnalazione su <a href="https://github.com/Balrog994/bandwise-eq/issues">GitHub</a>, anche in italiano. Le segnalazioni di bug con il sito dove è successo sono particolarmente utili.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <span class="grow">Bandwise EQ è fatta da Balrog994 e distribuita con licenza GPL-3.0.</span>
+      <a href="../privacy.html#it">Informativa sulla privacy</a>
+      <a href="https://github.com/Balrog994/bandwise-eq">Codice sorgente</a>
+      <a href="https://github.com/Balrog994/bandwise-eq/issues">Segnala un problema</a>
+    </div>
+  </footer>
+
+  <script src="../site.js"></script>
+</body>
+</html>
