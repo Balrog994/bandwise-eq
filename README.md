@@ -20,8 +20,8 @@ Demo video (56 seconds): [English](https://www.youtube.com/watch?v=1cyO4b-tbcw),
 
 ## Install
 
-- **Chrome Web Store:** [Bandwise EQ](https://chromewebstore.google.com/detail/bandwise-eq/pfefhdkgpknkcnjklobgbdjglndbfjmc).
-- **Microsoft Edge Add-ons:** [Bandwise EQ](https://microsoftedge.microsoft.com/addons/detail/ndgnjdgkncfkpemcapnbbpcjgmkjfijc).
+- **Chrome Web Store:** [Bandwise EQ](https://chromewebstore.google.com/detail/bandwise-eq/pfefhdkgpknkcnjklobgbdjglndbfjmc?utm_source=github).
+- **Microsoft Edge Add-ons:** [Bandwise EQ](https://microsoftedge.microsoft.com/addons/detail/ndgnjdgkncfkpemcapnbbpcjgmkjfijc?utm_source=github).
 - **From source:** clone this repository, open `chrome://extensions`, enable *Developer mode*, click *Load unpacked* and select the repository folder.
 
 Requires Chrome or Edge 116 or later.
